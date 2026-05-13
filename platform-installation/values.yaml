@@ -1,9 +1,0 @@
-serviceAccount:
-  create: true
-rbac:
-  create: true
-catalog:
-  enabled: true
-  cache:
-    enabled: false
-
