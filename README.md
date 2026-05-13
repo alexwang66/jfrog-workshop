@@ -1,33 +1,33 @@
-# NPM + Curation Workshop Guide (Customer)
+# NPM + Curation 工作坊指南（客戶版）
 
-目标：在客户本机完成一次 **npm 构建 + 发布 build-info**，并演示 **JFrog Curation 阻断“恶意版本” axios** 的下载。
+目標：在客戶本機完成一次 **npm 建置 + 發布 build-info**，並示範 **JFrog Curation 阻擋模擬惡意版本 `axios@1.7.2` 的下載**。
 
 ---
 
-## 0) 你需要准备
+## 0. 前置需求
 
-- JFrog Cloud 试用账号：`https://jfrog.com/start-free/`
-- 本机已安装（最少 3 个工具）：
+- JFrog Cloud 試用帳號：`https://jfrog.com/start-free/`
+- 本機需安裝：
   - JFrog CLI（`jf`）
   - Git（`git`）
-  - Node.js 20.x LTS（含 `npm`）
+  - Node.js 20.x LTS，包含 `npm`
 
-### 安装
+### 安裝
 
-- **安装 JFrog CLI**
-  - 打开：`https://jfrog.com/getcli/`
-  - 按页面选择你的 OS 下载/安装
+- **安裝 JFrog CLI**
+  - 開啟 `https://jfrog.com/getcli/`
+  - 依照作業系統下載並安裝對應套件。
 
-- **安装 Node.js 20.x LTS（含 npm）**
-  - 打开：`https://nodejs.org/`，选择 **LTS（20.x）** 安装包
-  - **Windows 提示**：安装向导建议勾选 “Add to PATH”（安装后重新打开一个新的 PowerShell/CMD 再执行 `node -v`）
-  - （macOS + Homebrew 可选）
+- **安裝 Node.js 20.x LTS**
+  - 開啟 `https://nodejs.org/`，安裝 **LTS 20.x** 版本。
+  - **Windows 注意事項：** 安裝時建議勾選 “Add to PATH”，安裝完成後重新開啟 PowerShell 或 CMD，再執行 `node -v`。
+  - macOS 搭配 Homebrew 可選用：
     ```bash
     brew install node@20
     brew link --force --overwrite node@20
     ```
 
-验证：
+驗證工具：
 
 ```bash
 jf --version
@@ -38,29 +38,29 @@ npm -v
 
 ---
 
-## 1) 登录 JFrog
+## 1. 登入 JFrog
 
-先登录 JFrog trial 平台并获取 Access Token。
+先登入你的 JFrog Platform 實例並產生 Access Token。
 
-参考官方文档：
+官方參考文件：
 - Access Tokens：`https://docs.jfrog.com/administration/docs/access-tokens`
 - JFrog CLI Configuration：`https://docs.jfrog.com/integrations/docs/configuring-the-cli`
 
 在 JFrog Platform UI 中：
-1. 打开你的 JFrog Platform 实例地址，例如：`https://<your-jfrog-domain>`
-2. 进入 Administration → Security → Access Tokens
-3. 点击 Generate Token，创建一个当前用户可用的 Access Token
-4. 复制 token 并妥善保存，后续 CLI 登录会用到
+1. 開啟你的 JFrog Platform 位址，例如 `https://<your-jfrog-domain>`。
+2. 進入 Administration -> Security -> Access Tokens。
+3. 點擊 Generate Token，為目前使用者建立 Access Token。
+4. 複製並妥善保存 token，後續 JFrog CLI 會使用它。
 
-Access Token 页面 URL 格式：
+Access Token 頁面 URL 格式：
 
 ```text
 https://<your-jfrog-domain>/ui/admin/configuration/security/access_tokens
 ```
 
-其中 `<your-jfrog-domain>` 是你的 JFrog Platform 域名，例如 `company.jfrog.io`。
+`<your-jfrog-domain>` 是你的 JFrog Platform 網域，例如 `company.jfrog.io`。
 
-然后用一条命令配置 JFrog CLI。Server ID 固定为 `Artifactory`。
+使用一條命令設定 JFrog CLI。Server ID 固定為 `Artifactory`。
 
 Windows PowerShell：
 
@@ -80,18 +80,18 @@ JFROG_ACCESS_TOKEN="<your-access-token>"
 jf c add Artifactory --url="$JFROG_URL" --access-token="$JFROG_ACCESS_TOKEN" --interactive=false
 ```
 
-验证：
+驗證設定：
 
 ```bash
 jf c show
 jf rt ping
 ```
 
-后续命令统一使用 Server ID：`Artifactory`。如果看到 `Server ID 'Artifactory' does not exist`，说明登录步骤没有成功创建 `Artifactory` 这个配置名，请重新执行上面的 `jf c add Artifactory ...` 命令。
+後續所有命令都使用 Server ID `Artifactory`。如果看到 `Server ID 'Artifactory' does not exist`，代表 CLI 設定沒有成功建立，請重新執行 `jf c add Artifactory ...`。
 
 ---
 
-## 2) 拉取 workshop 代码
+## 2. 複製工作坊 Repository
 
 ```bash
 cd ~
@@ -101,9 +101,9 @@ cd jfrog-workshop
 
 ---
 
-## 3) 一键创建 workshop 仓库（推荐）
+## 3. 建立工作坊 Repository
 
-在本项目自带脚本目录执行：
+在 `automation` 目錄執行建立 repository 的腳本。
 
 Windows PowerShell：
 
@@ -112,7 +112,7 @@ cd ~/jfrog-workshop/automation
 .\create-repo.ps1
 ```
 
-如果 PowerShell 执行策略阻止脚本运行，可在当前终端临时放开后重试：
+如果 PowerShell 執行原則阻擋腳本，可在目前終端機暫時允許腳本後重試：
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -127,16 +127,16 @@ chmod +x ./create-repo.sh
 ./create-repo.sh all
 ```
 
-脚本默认会创建（示例）：
-- resolve：`workshop-npm-virtual`（virtual）
-- remote：`workshop-npm-remote`（remote，指向 npmjs）
-- deploy：`workshop-npm-dev-local`（local）
+腳本會建立以下 npm repositories：
+- Resolve repository：`workshop-npm-virtual`（virtual）
+- Remote repository：`workshop-npm-remote`（remote，指向 npmjs）
+- Deploy repository：`workshop-npm-dev-local`（local）
 
 ---
 
-## 4) NPM：通过 Artifactory 安装、发布包、发布 build-info
+## 4. NPM 建置、發布與 Build-Info
 
-进入示例目录。
+進入範例專案目錄。
 
 Windows PowerShell：
 
@@ -152,9 +152,9 @@ cd ~/jfrog-workshop/npm-sample
 cat ./package.json
 ```
 
-后续所有 `npm` 和 `jf npm ...` 命令都必须在 `npm-sample` 目录执行。不要在 `automation` 目录执行这些命令；`automation` 只用于创建 JFrog 仓库。
+所有 `npm` 與 `jf npm ...` 命令都必須在 `npm-sample` 目錄中執行。不要在 `automation` 目錄中執行這些命令；`automation` 只用於建立 JFrog repositories。
 
-配置 npm 解析/部署到你刚创建的仓库：
+設定 npm 解析與部署：
 
 Windows PowerShell：
 
@@ -178,7 +178,7 @@ jf npm-config \
   --global=false
 ```
 
-清理本地安装结果、`package-lock.json` 和 npm 缓存，确保依赖重新通过 JFrog Artifactory 解析：
+清理本機安裝結果、`package-lock.json` 與 npm 快取，確保依賴重新透過 JFrog Artifactory 解析。
 
 Windows PowerShell：
 
@@ -188,7 +188,7 @@ npm cache clean --force
 Test-Path .\package-lock.json
 ```
 
-`Test-Path .\package-lock.json` 输出 `False` 表示 lock 文件已删除。
+`Test-Path .\package-lock.json` 應回傳 `False`，表示 lock 檔案已刪除。
 
 macOS / Linux：
 
@@ -198,7 +198,7 @@ npm cache clean --force
 test ! -f ./package-lock.json && echo "package-lock.json removed"
 ```
 
-执行安装/发布，并发布 build-info：
+安裝、發布套件並發布 build-info：
 
 Windows PowerShell：
 
@@ -228,22 +228,22 @@ jf rt build-collect-env "$BUILD_NAME" "$BUILD_NUMBER"
 jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 ```
 
-在 UI 查看：
-- Artifactory → Builds → `npm-sample` → `#1`
+在 UI 中驗證：
+- Artifactory -> Builds -> `npm-sample` -> `#1`
 
 ---
 
-## 5) Curation 演示：把 `axios@1.7.2` 当作“恶意版本”并阻断下载
+## 5. Curation 示範：阻擋 `axios@1.7.2`
 
-本 workshop **假设**：`axios@1.7.2` 是恶意版本，目标是让 `npm install` 在解析到该版本时被 Curation 阻断。
+本工作坊 **將 `axios@1.7.2` 視為模擬惡意套件版本**。目標是讓 `npm install` 透過 JFrog Curation 解析到該版本時被阻擋。
 
-### 5.1 确保项目依赖了这个版本
+### 5.1 確認專案依賴此版本
 
-在 `~/jfrog-workshop/npm-sample/package.json` 确保有这一行（若不同请修改）：
+在 `~/jfrog-workshop/npm-sample/package.json` 中，確認存在以下依賴：
 
 - `"axios": "1.7.2"`
 
-然后清理并准备重新安装。这里必须删除 `package-lock.json`，否则 npm 可能直接按 lock 文件判断依赖已满足，Curation 阻断不容易被观察到：
+接著在重新安裝前清理專案。必須刪除 `package-lock.json`；否則 npm 可能判斷依賴樹已滿足，導致 Curation 阻擋效果不易觀察。
 
 Windows PowerShell：
 
@@ -254,7 +254,7 @@ npm cache clean --force
 Test-Path .\package-lock.json
 ```
 
-`Test-Path .\package-lock.json` 输出 `False` 表示 lock 文件已删除。
+`Test-Path .\package-lock.json` 應回傳 `False`。
 
 macOS / Linux：
 
@@ -265,73 +265,72 @@ npm cache clean --force
 test ! -f ./package-lock.json && echo "package-lock.json removed"
 ```
 
-### 5.2 在 JFrog UI 创建 Curation Policy（阻断 axios@1.7.2）
+### 5.2 在 JFrog UI 建立 Curation Policy
 
-这里需要 **先创建 Custom Condition**，再用它创建 Policy。
+先建立 Custom Condition，再將它用於 Curation Policy。
 
-#### 5.2.1 创建 Custom Condition（customer condition）
+#### 5.2.1 建立 Custom Condition
 
-参考官方文档：`https://docs.jfrog.com/security/docs/create-custom-conditions`
+官方參考文件：`https://docs.jfrog.com/security/docs/create-custom-conditions`
 
-在 JFrog UI：
-- Administration → Curation Settings → **Conditions**
-- 右上角 **Create Condition**
-- 选择模板：**Block Specific Package Versions**
-- 配置：
+在 JFrog UI 中：
+- 進入 Administration -> Curation Settings -> **Conditions**。
+- 點擊 **Create Condition**。
+- 選擇 **Block Specific Package Versions** 範本。
+- 設定：
   - Package type：`npm`
   - Package：`axios`
   - Version：`1.7.2`
-- Save
+- 儲存 condition。
 
-示例界面：
+示例：
 
 ![Create Curation Condition](./workshop/images/current-curation-condition.svg)
 
-#### 5.2.2 创建 Policy 并应用到 npm remote
+#### 5.2.2 建立 Policy 並套用到 NPM Remote Repository
 
-在 JFrog UI：
-- Administration → Curation → **Policies Management**
-- Create Policy：
-  - Scope：选择 **Specific remote repositories**（选 `workshop-npm-remote`）
-  - Condition：选择刚创建的 custom condition（axios 1.7.2）
-  - Action：**Block**
-- Save
+在 JFrog UI 中：
+- 進入 Administration -> Curation -> **Policies Management**。
+- 建立 policy：
+  - Scope：選擇 **Specific remote repositories**，並選取 `workshop-npm-remote`。
+  - Condition：選擇剛建立的 `axios 1.7.2` custom condition。
+  - Action：**Block**。
+- 儲存 policy。
 
-示例界面：
+示例：
 
 ![Create Curation Policy](./workshop/images/current-curation-policy.svg)
 
-确保 Curation 对该 remote 生效（UI 入口因版本略有不同）：
-- Administration → Curation → Remote Repositories（或类似页面）
-- 找到 `workshop-npm-remote`，确保启用 Curation
+確認 remote repository 已啟用 Curation：
+- 進入 Administration -> Curation -> Remote Repositories，或依你的 UI 版本進入類似頁面。
+- 找到 `workshop-npm-remote`，確認 Curation 已啟用。
 
-示例界面：
+示例：
 
 ![Enable Curation Remote Repository](./workshop/images/current-curation-remote.svg)
 
-> UI 入口名称可能随版本略有不同，以你实例的实际菜单为准。
+不同 JFrog Platform 版本的 UI 標籤可能略有差異，請以你的實例畫面為準。
 
-### 5.3 清理 Artifactory remote cache 中已缓存的 axios
+### 5.3 從 Artifactory Remote Cache 刪除已快取的 `axios`
 
-如果 `axios@1.7.2` 在创建 Curation Policy 之前已经被下载过，Artifactory 可能已经把它缓存到了 remote cache。需要先删除这个缓存，再重新执行本地 npm 清理和安装。
+如果 `axios@1.7.2` 在建立 Curation policy 前已被下載，Artifactory 可能已將它快取到 remote cache repository。重新安裝前需先刪除該快取套件。
 
-参考官方文档：
+官方參考文件：
 - Remote Repositories：`https://docs.jfrog.com/artifactory/docs/remote-repositories`
 - Managing Artifacts：`https://docs.jfrog.com/artifactory/docs/managing-artifacts`
 
-在 JFrog UI：
-1. 进入 Artifactory → Artifacts
-2. 找到 remote cache 仓库：`workshop-npm-remote-cache`
-3. 在该仓库中找到 `axios`
-4. 右键 `axios`，选择 Delete / Delete Content
-5. 确认删除
+在 JFrog UI 中：
+1. 進入 Artifactory -> Artifacts。
+2. 開啟 remote cache repository：`workshop-npm-remote-cache`。
+3. 找到 `axios`。
+4. 右鍵點擊 `axios`，選擇 Delete / Delete Content。
+5. 確認刪除。
 
-示例界面：
+示例：
 
 ![Delete Axios From Remote Cache](./workshop/images/current-remote-cache-delete.svg)
 
-
-### 5.4 重新执行 install，观察被阻断
+### 5.4 重新執行 Install 並觀察阻擋
 
 Windows PowerShell：
 
@@ -365,25 +364,25 @@ jf rt build-collect-env "$BUILD_NAME" "$BUILD_NUMBER"
 jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 ```
 
-期望现象：
-- CLI 输出显示某个依赖版本被阻断（axios@1.7.2）
-- 安装失败或被替换为允许版本（取决于你 policy 的动作与配置）
-- 如果 install 成功，Builds 中可以查看 `npm-curation` → `#2` 的 build-info
+預期結果：
+- CLI 輸出顯示某個套件版本被阻擋，具體為 `axios@1.7.2`。
+- 安裝失敗，或依 policy action 與設定被替換為允許版本。
+- 如果 install 成功，可在 Builds -> `npm-curation` -> `#2` 查看 build-info。
 
-CLI 被阻断的示例输出：
+CLI 被阻擋輸出示例：
 
 ![Curation CLI Blocked](./workshop/images/current-cli-blocked.svg)
 
-如果输出类似 `added 28 packages`，说明 npm 已经成功安装依赖，Curation 没有阻断本次下载。请检查：
-- Policy 是否已经保存并启用
-- Policy action 是否是 **Block**，而不是 Dry Run / Audit-only
-- Policy scope 是否选中了 `workshop-npm-remote`
-- Administration → Curation → Remote Repositories 中，`workshop-npm-remote` 是否是 Connected / Curated 状态
-- `workshop-npm-remote` 是否启用了 Xray indexing；官方 On-Demand Curation 文档建议同时确认 remote repository 已启用 Curation 和 Xray indexing
-- Custom Condition 是否准确配置为 Package type：`npm`，Package：`axios`，Version：`1.7.2`
-- 本地是否已经删除 `node_modules`、`package-lock.json` 并执行 `npm cache clean --force`
-- Artifactory → Artifacts → `workshop-npm-remote-cache` 中的 `axios` 是否已经删除；删除后刷新页面确认 `axios` 不再存在
-- Curation 的 audit/event 页面是否出现本次下载事件。如果没有事件，通常说明 repository 没有被 Curation 接管；如果事件结果是 No Policy Violation，通常说明 policy condition/scope/action 没有匹配
+如果輸出類似 `added 28 packages`，表示 npm 已成功安裝依賴，Curation 沒有阻擋本次下載。請檢查：
+- Policy 是否已儲存並啟用。
+- Policy action 是否為 **Block**，而不是 Dry Run 或僅 audit。
+- Policy scope 是否包含 `workshop-npm-remote`。
+- Administration -> Curation -> Remote Repositories 是否顯示 `workshop-npm-remote` 為 Connected / Curated。
+- `workshop-npm-remote` 是否已啟用 Xray indexing。官方 On-Demand Curation 文件建議同時確認 remote repository 已啟用 Curation 與 Xray indexing。
+- Custom condition 是否精確匹配 Package type `npm`、Package `axios`、Version `1.7.2`。
+- 本機 `node_modules` 與 `package-lock.json` 是否已刪除，並已執行 `npm cache clean --force`。
+- Artifactory -> Artifacts -> `workshop-npm-remote-cache` 中是否已不再包含 `axios`。
+- Curation audit/events 是否出現本次下載事件。若沒有事件，通常表示該 repository 尚未由 Curation 接管。若事件顯示 No Policy Violation，通常表示 policy condition、scope 或 action 未匹配。
 
 Curation audit event 示例：
 

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="420" viewBox="0 0 1180 420">
+  <rect width="1180" height="420" fill="#101828"/>
+  <text x="32" y="54" font-family="Consolas, monospace" font-size="20" fill="#d0d5dd">PS D:\jfrog\code\jfrog-devopsdays-workshop\npm-sample&gt; jf npm install --build-name=npm-curation --build-number=2</text>
+  <text x="32" y="104" font-family="Consolas, monospace" font-size="20" fill="#7cd4fd">[Info] Trace ID for JFrog Platform logs: 1234567890abcdef</text>
+  <text x="32" y="154" font-family="Consolas, monospace" font-size="20" fill="#f97066">npm error 403 Forbidden - GET .../workshop-npm-virtual/axios/-/axios-1.7.2.tgz</text>
+  <text x="32" y="204" font-family="Consolas, monospace" font-size="20" fill="#f97066">npm error package axios:1.7.2 download was blocked by JFrog Curation</text>
+  <text x="32" y="254" font-family="Consolas, monospace" font-size="20" fill="#f97066">npm error policy violation: Block Specific Package Versions / axios 1.7.2</text>
+  <text x="32" y="316" font-family="Consolas, monospace" font-size="18" fill="#d0d5dd">Expected: install fails before the blocked package is downloaded.</text>
+</svg>
