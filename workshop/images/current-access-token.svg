@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="520" viewBox="0 0 1180 520">
+  <rect width="1180" height="520" fill="#f7f9fc"/>
+  <rect width="1180" height="54" fill="#17243a"/>
+  <text x="28" y="35" font-family="Arial, sans-serif" font-size="18" fill="#43c76a" font-weight="700">JFrog Platform</text>
+  <text x="190" y="35" font-family="Arial, sans-serif" font-size="16" fill="#ffffff">Administration</text>
+  <rect x="32" y="86" width="1116" height="390" rx="8" fill="#ffffff" stroke="#d8dee9"/>
+  <text x="64" y="132" font-family="Arial, sans-serif" font-size="28" fill="#344054" font-weight="700">User Profile</text>
+  <text x="64" y="188" font-family="Arial, sans-serif" font-size="18" fill="#667085">Personal Settings</text>
+  <rect x="64" y="216" width="420" height="44" rx="6" fill="#f2f4f7" stroke="#d0d5dd"/>
+  <text x="82" y="244" font-family="Arial, sans-serif" font-size="15" fill="#667085">user@example.com</text>
+  <text x="64" y="322" font-family="Arial, sans-serif" font-size="18" fill="#667085">Authentication Settings</text>
+  <rect x="64" y="350" width="300" height="56" rx="6" fill="#e8f3ff" stroke="#1570ef" stroke-width="3"/>
+  <text x="92" y="385" font-family="Arial, sans-serif" font-size="18" fill="#175cd3" font-weight="700">Generate an Identity Token</text>
+  <rect x="720" y="118" width="360" height="260" rx="10" fill="#101828"/>
+  <circle cx="766" cy="168" r="34" fill="#e4e7ec"/>
+  <text x="756" y="178" font-family="Arial, sans-serif" font-size="24" fill="#344054" font-weight="700">A</text>
+  <text x="820" y="156" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" font-weight="700">Account Menu</text>
+  <text x="820" y="184" font-family="Arial, sans-serif" font-size="14" fill="#d0d5dd">Generate token for CLI login</text>
+  <line x1="748" y1="220" x2="1048" y2="220" stroke="#475467"/>
+  <text x="748" y="262" font-family="Arial, sans-serif" font-size="17" fill="#ffffff">Use token with:</text>
+  <text x="748" y="298" font-family="Consolas, monospace" font-size="15" fill="#7cd4fd">jf c add Artifactory --url=... --access-token=...</text>
+</svg>

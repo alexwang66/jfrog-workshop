@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="500" viewBox="0 0 1180 500">
+  <rect width="1180" height="500" fill="#f7f9fc"/>
+  <rect x="32" y="32" width="1116" height="436" rx="10" fill="#ffffff" stroke="#d8dee9"/>
+  <text x="64" y="82" font-family="Arial, sans-serif" font-size="28" fill="#344054" font-weight="700">Curation Settings / Remote Repositories / Npm</text>
+  <rect x="64" y="122" width="1050" height="56" rx="6" fill="#ecfdf3" stroke="#12b76a"/>
+  <text x="88" y="158" font-family="Arial, sans-serif" font-size="18" fill="#027a48" font-weight="700">Connect package type status: Connected</text>
+  <text x="64" y="238" font-family="Arial, sans-serif" font-size="16" fill="#667085">Connected</text>
+  <text x="270" y="238" font-family="Arial, sans-serif" font-size="16" fill="#667085">Repository Name</text>
+  <text x="626" y="238" font-family="Arial, sans-serif" font-size="16" fill="#667085">Package Type</text>
+  <text x="820" y="238" font-family="Arial, sans-serif" font-size="16" fill="#667085">Policies Coverage</text>
+  <line x1="64" y1="258" x2="1114" y2="258" stroke="#d0d5dd"/>
+  <rect x="78" y="294" width="52" height="28" rx="14" fill="#12b76a"/>
+  <circle cx="116" cy="308" r="11" fill="#ffffff"/>
+  <text x="270" y="316" font-family="Arial, sans-serif" font-size="20" fill="#344054" font-weight="700">workshop-npm-remote</text>
+  <text x="626" y="316" font-family="Arial, sans-serif" font-size="20" fill="#344054">npm</text>
+  <rect x="820" y="288" width="110" height="40" rx="20" fill="#ecfdf3"/>
+  <text x="846" y="314" font-family="Arial, sans-serif" font-size="16" fill="#027a48" font-weight="700">Curated</text>
+</svg>
