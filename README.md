@@ -52,6 +52,10 @@ npm -v
 3. 创建一个当前用户可用的 Access Token
 4. 复制 token 并妥善保存，后续 CLI 登录会用到
 
+示例界面：
+
+![Generate Access Token](./workshop/images/generate-accesstoken.png)
+
 然后用一条命令配置 JFrog CLI。Server ID 固定为 `Artifactory`。
 
 Windows PowerShell：
@@ -275,6 +279,10 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
   - Version：`1.7.2`
 - Save
 
+示例界面：
+
+![Create Curation Condition](./workshop/images/condition.png)
+
 #### 5.2.2 创建 Policy 并应用到 npm remote
 
 在 JFrog UI：
@@ -285,9 +293,21 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
   - Action：**Block**
 - Save
 
+选择 remote repository 的示例界面：
+
+![Select Remote Repository](./workshop/images/specific-repo.png)
+
+选择 Block action 的示例界面：
+
+![Select Block Action](./workshop/images/block.png)
+
 确保 Curation 对该 remote 生效（UI 入口因版本略有不同）：
 - Administration → Curation → Remote Repositories（或类似页面）
 - 找到 `workshop-npm-remote`，确保启用 Curation
+
+示例界面：
+
+![Enable Curation Remote Repository](./workshop/images/curation-enabled.png)
 
 > UI 入口名称可能随版本略有不同，以你实例的实际菜单为准。
 
@@ -346,6 +366,10 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 - 安装失败或被替换为允许版本（取决于你 policy 的动作与配置）
 - 如果 install 成功，Builds 中可以查看 `npm-curation` → `#2` 的 build-info
 
+CLI 被阻断的示例输出：
+
+![Curation CLI Blocked](./workshop/images/violated-msg.png)
+
 如果输出类似 `added 28 packages`，说明 npm 已经成功安装依赖，Curation 没有阻断本次下载。请检查：
 - Policy 是否已经保存并启用
 - Policy action 是否是 **Block**，而不是 Dry Run / Audit-only
@@ -356,3 +380,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 - 本地是否已经删除 `node_modules`、`package-lock.json` 并执行 `npm cache clean --force`
 - Artifactory → Artifacts → `workshop-npm-remote-cache` 中的 `axios` 是否已经删除；删除后刷新页面确认 `axios` 不再存在
 - Curation 的 audit/event 页面是否出现本次下载事件。如果没有事件，通常说明 repository 没有被 Curation 接管；如果事件结果是 No Policy Violation，通常说明 policy condition/scope/action 没有匹配
+
+Curation audit event 示例：
+
+![Curation Audit Blocked](./workshop/images/audit-event.png)
