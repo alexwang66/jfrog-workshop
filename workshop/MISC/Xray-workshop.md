@@ -167,8 +167,8 @@ OK
 Create repo:
 
 ```
-cd /home/workshop/jfrog-sample/workshop/automation
-sh ./create-repo.sh 
+cd /home/workshop/jfrog-sample/automation
+./create-repo.sh
 ```
 
 Inside `npm-sample`, configure npm resolution and deployment:
