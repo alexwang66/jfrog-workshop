@@ -49,12 +49,15 @@ npm -v
 在 JFrog Platform UI 中：
 1. 打开你的 JFrog trial 地址，例如：`https://<your-company>.jfrog.io`
 2. 进入 Administration → User Management → Access Tokens
-3. 创建一个当前用户可用的 Access Token
+3. 点击 Generate Token，创建一个当前用户可用的 Access Token
 4. 复制 token 并妥善保存，后续 CLI 登录会用到
 
-示例界面：
+示例入口：
 
-![Generate Access Token](./workshop/images/generate-accesstoken.png)
+```text
+https://<your-company>.jfrog.io/ui/admin/configuration/security/access_tokens
+```
+
 
 然后用一条命令配置 JFrog CLI。Server ID 固定为 `Artifactory`。
 
@@ -281,7 +284,7 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 示例界面：
 
-![Create Curation Condition](./workshop/images/condition.png)
+![Create Curation Condition](./workshop/images/current-curation-condition.svg)
 
 #### 5.2.2 创建 Policy 并应用到 npm remote
 
@@ -293,13 +296,9 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
   - Action：**Block**
 - Save
 
-选择 remote repository 的示例界面：
+示例界面：
 
-![Select Remote Repository](./workshop/images/specific-repo.png)
-
-选择 Block action 的示例界面：
-
-![Select Block Action](./workshop/images/block.png)
+![Create Curation Policy](./workshop/images/current-curation-policy.svg)
 
 确保 Curation 对该 remote 生效（UI 入口因版本略有不同）：
 - Administration → Curation → Remote Repositories（或类似页面）
@@ -307,7 +306,7 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 示例界面：
 
-![Enable Curation Remote Repository](./workshop/images/curation-enabled.png)
+![Enable Curation Remote Repository](./workshop/images/current-curation-remote.svg)
 
 > UI 入口名称可能随版本略有不同，以你实例的实际菜单为准。
 
@@ -325,6 +324,10 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 3. 在该仓库中找到 `axios`
 4. 右键 `axios`，选择 Delete / Delete Content
 5. 确认删除
+
+示例界面：
+
+![Delete Axios From Remote Cache](./workshop/images/current-remote-cache-delete.svg)
 
 
 ### 5.4 重新执行 install，观察被阻断
@@ -368,7 +371,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 CLI 被阻断的示例输出：
 
-![Curation CLI Blocked](./workshop/images/violated-msg.png)
+![Curation CLI Blocked](./workshop/images/current-cli-blocked.svg)
 
 如果输出类似 `added 28 packages`，说明 npm 已经成功安装依赖，Curation 没有阻断本次下载。请检查：
 - Policy 是否已经保存并启用
@@ -383,4 +386,4 @@ CLI 被阻断的示例输出：
 
 Curation audit event 示例：
 
-![Curation Audit Blocked](./workshop/images/audit-event.png)
+![Curation Audit Blocked](./workshop/images/current-curation-audit.svg)
