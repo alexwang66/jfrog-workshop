@@ -47,24 +47,25 @@ npm -v
 - JFrog CLI Configuration：`https://docs.jfrog.com/integrations/docs/configuring-the-cli`
 
 在 JFrog Platform UI 中：
-1. 打开你的 JFrog trial 地址，例如：`https://<your-company>.jfrog.io`
-2. 进入 Administration → User Management → Access Tokens
+1. 打开你的 JFrog Platform 实例地址，例如：`https://<your-jfrog-domain>`
+2. 进入 Administration → Security → Access Tokens
 3. 点击 Generate Token，创建一个当前用户可用的 Access Token
 4. 复制 token 并妥善保存，后续 CLI 登录会用到
 
-示例入口：
+Access Token 页面 URL 格式：
 
 ```text
-https://<your-company>.jfrog.io/ui/admin/configuration/security/access_tokens
+https://<your-jfrog-domain>/ui/admin/configuration/security/access_tokens
 ```
 
+其中 `<your-jfrog-domain>` 是你的 JFrog Platform 域名，例如 `company.jfrog.io`。
 
 然后用一条命令配置 JFrog CLI。Server ID 固定为 `Artifactory`。
 
 Windows PowerShell：
 
 ```powershell
-$env:JFROG_URL = "https://<your-company>.jfrog.io"
+$env:JFROG_URL = "https://<your-jfrog-domain>"
 $env:JFROG_ACCESS_TOKEN = "<your-access-token>"
 
 jf c add Artifactory --url=$env:JFROG_URL --access-token=$env:JFROG_ACCESS_TOKEN --interactive=false
@@ -73,7 +74,7 @@ jf c add Artifactory --url=$env:JFROG_URL --access-token=$env:JFROG_ACCESS_TOKEN
 macOS / Linux：
 
 ```bash
-JFROG_URL="https://<your-company>.jfrog.io"
+JFROG_URL="https://<your-jfrog-domain>"
 JFROG_ACCESS_TOKEN="<your-access-token>"
 
 jf c add Artifactory --url="$JFROG_URL" --access-token="$JFROG_ACCESS_TOKEN" --interactive=false
