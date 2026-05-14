@@ -284,15 +284,39 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 示例：
 
-Enable Curation Remote Repository
+![Enable Curation Remote Repository](./workshop/images/current-curation-remote.svg)
 
 不同 JFrog Platform 版本的 UI 標籤可能略有差異，請以你的實例畫面為準。
 
-### 5.2 確認專案依賴此版本
+### 5.2 將範例專案切換到被阻擋版本
 
-在 `~/jfrog-workshop/npm-sample/package.json` 中，確認存在以下依賴：
+為了觸發 Curation 阻擋，先直接修改 `~/jfrog-workshop/npm-sample/package.json`，將範例專案的 `axios` 依賴切換到本 Lab 指定的模擬風險版本。
 
-- `"axios": "1.7.2"`
+Windows PowerShell：
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+notepad .\package.json
+Get-Content .\package.json
+```
+
+macOS / Linux：
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+nano package.json
+cat package.json
+```
+
+確認 `package.json` 中存在以下內容：
+
+```json
+{
+  "dependencies": {
+    "axios": "1.7.2"
+  }
+}
+```
 
 接著在重新安裝前清理專案。必須刪除 `package-lock.json`；否則 npm 可能判斷依賴樹已滿足，導致 Curation 阻擋效果不易觀察。
 
@@ -338,7 +362,7 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 示例：
 
-Create Curation Condition
+![Create Curation Condition](./workshop/images/current-curation-condition.svg)
 
 #### 5.3.2 建立 Policy 並套用到 NPM Remote Repository
 
@@ -354,7 +378,7 @@ Create Curation Condition
 
 示例：
 
-Create Curation Policy
+![Create Curation Policy](./workshop/images/current-curation-policy.svg)
 
 ### 5.4 從 Artifactory Remote Cache 刪除已快取的 `axios`
 
@@ -373,7 +397,9 @@ Create Curation Policy
 4. 右鍵點擊 `axios`，選擇 Delete / Delete Content。
 5. 確認刪除。
 
+示例：
 
+![Delete Axios From Remote Cache](./workshop/images/current-remote-cache-delete.svg)
 
 ### 5.5 重新執行 Install 並觀察阻擋
 
@@ -436,3 +462,99 @@ CLI 被阻擋輸出示例：
 Curation audit event 示例：
 
 ![Curation Audit Blocked](./workshop/images/current-curation-audit.svg)
+
+### 5.6 在 Catalog 中選擇可用版本並重新構建
+
+阻擋效果確認後，回到 JFrog Catalog 查找 `axios` 的最新版本，確認該版本是否可下載。
+
+官方參考文件：
+
+- Catalog：`https://docs.jfrog.com/security/docs/catalog`
+- Use npm with JFrog CLI：`https://docs.jfrog.com/artifactory/docs/use-npm-with-jfrog-cli`
+
+在 JFrog UI 中：
+
+1. 進入 Catalog -> Explore。
+2. 搜尋 `axios`。
+3. 選擇最新版本 `1.16.1`。
+4. 確認頁面顯示 **Approved for downloading**。
+
+示例：
+
+![Catalog Axios Approved](./workshop/images/current-catalog-axios-approved.svg)
+
+接著直接修改 `package.json`，將專案修復到允許版本並更新應用版本號。
+
+Windows PowerShell：
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+$env:STUDENT_ID = "alex"
+
+notepad .\package.json
+Get-Content .\package.json
+```
+
+macOS / Linux：
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+export STUDENT_ID="alex"
+
+nano package.json
+cat package.json
+```
+
+確認 `package.json` 中至少包含以下內容：
+
+```json
+{
+  "version": "1.0.4",
+  "dependencies": {
+    "axios": "1.16.1"
+  }
+}
+```
+
+清理本機 npm 狀態後重新構建並上傳 build-info。
+
+Windows PowerShell：
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+$env:STUDENT_ID = "alex"
+
+Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
+npm cache clean --force
+
+$env:BUILD_NAME = "$($env:STUDENT_ID)-npm-remediation"
+$env:BUILD_NUMBER = "3"
+
+jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
+jf rt build-add-git $env:BUILD_NAME $env:BUILD_NUMBER
+jf rt build-collect-env $env:BUILD_NAME $env:BUILD_NUMBER
+jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
+```
+
+macOS / Linux：
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+export STUDENT_ID="alex"
+
+rm -rf node_modules package-lock.json
+npm cache clean --force
+
+BUILD_NAME="${STUDENT_ID}-npm-remediation"
+BUILD_NUMBER=3
+
+jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
+jf rt build-add-git "$BUILD_NAME" "$BUILD_NUMBER"
+jf rt build-collect-env "$BUILD_NAME" "$BUILD_NUMBER"
+jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
+```
+
+在 UI 中驗證：
+
+- Artifactory -> Builds -> `<student-id>-npm-remediation` -> `#3`
+- Build-info 中的 dependencies 應顯示已使用 `axios@1.16.1`。

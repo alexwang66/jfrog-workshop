@@ -1,6 +1,6 @@
 {
   "name": "jfrog-npm-demo",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "NPM project using JFrog CLI",
   "main": "index.js",
   "scripts": {

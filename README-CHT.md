@@ -284,11 +284,35 @@ Example:
 
 UI labels may vary slightly by JFrog Platform version. Use the labels in your own instance as the source of truth.
 
-### 5.2 Confirm The Project Depends On This Version
+### 5.2 Switch The Sample Project To The Blocked Version
 
-In `~/jfrog-workshop/npm-sample/package.json`, make sure this dependency exists:
+To trigger the Curation block, directly edit `~/jfrog-workshop/npm-sample/package.json` and switch the sample project to the simulated risky package version used in this lab.
 
-- `"axios": "1.7.2"`
+Windows PowerShell:
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+notepad .\package.json
+Get-Content .\package.json
+```
+
+macOS / Linux:
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+nano package.json
+cat package.json
+```
+
+Confirm that `package.json` contains this content:
+
+```json
+{
+  "dependencies": {
+    "axios": "1.7.2"
+  }
+}
+```
 
 Then clean the project before reinstalling. `package-lock.json` must be deleted; otherwise npm may decide the dependency tree is already satisfied and the Curation block may not be observable.
 
@@ -434,3 +458,96 @@ If the output is similar to `added 28 packages`, npm installed the dependencies 
 Curation audit event example:
 
 ![Curation Audit Blocked](./workshop/images/current-curation-audit.svg)
+
+### 5.6 Find An Approved Version In Catalog And Rebuild
+
+After confirming the block, go back to JFrog Catalog, find the latest `axios` version, and verify that it is allowed for download.
+
+Official references:
+- Catalog: `https://docs.jfrog.com/security/docs/catalog`
+- Use npm with JFrog CLI: `https://docs.jfrog.com/artifactory/docs/use-npm-with-jfrog-cli`
+
+In the JFrog UI:
+1. Go to Catalog -> Explore.
+2. Search for `axios`.
+3. Select the latest version, `1.16.1`.
+4. Confirm that the page shows **Approved for downloading**.
+
+Example:
+
+![Catalog Axios Approved](./workshop/images/current-catalog-axios-approved.svg)
+
+Then directly edit `package.json` to remediate the project to the approved version and update the package version.
+
+Windows PowerShell:
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+$env:STUDENT_ID = "alex"
+
+notepad .\package.json
+Get-Content .\package.json
+```
+
+macOS / Linux:
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+export STUDENT_ID="alex"
+
+nano package.json
+cat package.json
+```
+
+Confirm that `package.json` contains at least this content:
+
+```json
+{
+  "version": "1.0.4",
+  "dependencies": {
+    "axios": "1.16.1"
+  }
+}
+```
+
+Clean the local npm state, rebuild, and publish build-info.
+
+Windows PowerShell:
+
+```powershell
+cd ~/jfrog-workshop/npm-sample
+$env:STUDENT_ID = "alex"
+
+Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
+npm cache clean --force
+
+$env:BUILD_NAME = "$($env:STUDENT_ID)-npm-remediation"
+$env:BUILD_NUMBER = "3"
+
+jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
+jf rt build-add-git $env:BUILD_NAME $env:BUILD_NUMBER
+jf rt build-collect-env $env:BUILD_NAME $env:BUILD_NUMBER
+jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
+```
+
+macOS / Linux:
+
+```bash
+cd ~/jfrog-workshop/npm-sample
+export STUDENT_ID="alex"
+
+rm -rf node_modules package-lock.json
+npm cache clean --force
+
+BUILD_NAME="${STUDENT_ID}-npm-remediation"
+BUILD_NUMBER=3
+
+jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
+jf rt build-add-git "$BUILD_NAME" "$BUILD_NUMBER"
+jf rt build-collect-env "$BUILD_NAME" "$BUILD_NUMBER"
+jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
+```
+
+Verify in the UI:
+- Artifactory -> Builds -> `<student-id>-npm-remediation` -> `#3`
+- The build-info dependencies should show `axios@1.16.1`.
