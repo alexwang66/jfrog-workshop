@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1660" viewBox="0 0 960 1660">
+  <rect width="960" height="1660" fill="#ffffff"/>
+  <text x="60" y="80" font-family="Arial, sans-serif" font-size="28" fill="#4b5565">◉ All Projects  ›  Catalog  ›  Explore  ›</text>
+  <text x="694" y="80" font-family="Arial, sans-serif" font-size="32" fill="#344054" font-weight="700">axios</text>
+
+  <text x="60" y="220" font-family="Arial, sans-serif" font-size="28" fill="#526174">Version</text>
+  <rect x="60" y="236" width="535" height="76" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="86" y="286" font-family="Arial, sans-serif" font-size="28" fill="#4b5565">1.16.1</text>
+  <rect x="394" y="252" width="124" height="46" rx="7" fill="#eee9ff"/>
+  <text x="412" y="282" font-family="Arial, sans-serif" font-size="20" fill="#7147e8">Latest 🚀</text>
+  <text x="664" y="286" font-family="Arial, sans-serif" font-size="28" fill="#344054" font-weight="700">All versions (140)</text>
+
+  <rect x="60" y="360" width="836" height="1260" rx="14" fill="#ffffff" stroke="#d8dee9"/>
+  <rect x="60" y="360" width="836" height="18" rx="14" fill="#3e5b85"/>
+  <text x="108" y="472" font-family="Arial, sans-serif" font-size="34" fill="#cf2935" font-weight="700">npm</text>
+  <text x="214" y="474" font-family="Arial, sans-serif" font-size="32" fill="#344054" font-weight="700">axios</text>
+  <text x="768" y="446" font-family="Arial, sans-serif" font-size="30" fill="#40516b">1.16.1</text>
+  <rect x="760" y="454" width="91" height="38" rx="4" fill="#e7f8e5"/>
+  <text x="772" y="481" font-family="Arial, sans-serif" font-size="24" fill="#24a148">Latest</text>
+
+  <text x="102" y="562" font-family="Arial, sans-serif" font-size="25" fill="#8a94aa">Promise based HTTP client for the browser and node.js</text>
+  <rect x="102" y="600" width="176" height="53" rx="7" fill="#e9eef6"/>
+  <text x="132" y="634" font-family="Arial, sans-serif" font-size="24" fill="#56657a">Compare</text>
+  <rect x="291" y="600" width="176" height="53" rx="7" fill="#e9eef6"/>
+  <text x="365" y="634" font-family="Arial, sans-serif" font-size="24" fill="#56657a">cURL</text>
+  <rect x="479" y="600" width="178" height="53" rx="7" fill="#e9eef6"/>
+  <text x="538" y="634" font-family="Arial, sans-serif" font-size="24" fill="#56657a">GraphQL</text>
+
+  <line x1="102" y1="683" x2="838" y2="683" stroke="#e5e7eb"/>
+  <rect x="102" y="716" width="736" height="150" rx="7" fill="#ebfae7"/>
+  <circle cx="145" cy="750" r="15" fill="#ffffff" stroke="#32c766" stroke-width="4"/>
+  <text x="136" y="759" font-family="Arial, sans-serif" font-size="20" fill="#32c766">✓</text>
+  <text x="186" y="762" font-family="Arial, sans-serif" font-size="30" fill="#3e4857" font-weight="700">Approved for downloading</text>
+  <text x="186" y="804" font-family="Arial, sans-serif" font-size="26" fill="#3e4857">This package is allowed for download without</text>
+  <text x="186" y="842" font-family="Arial, sans-serif" font-size="26" fill="#3e4857">restrictions per the Curation Policies.</text>
+
+  <text x="150" y="932" font-family="Arial, sans-serif" font-size="26" fill="#526174" font-weight="700">Labels</text>
+  <rect x="372" y="899" width="190" height="49" rx="7" fill="#e9eef6"/>
+  <text x="395" y="932" font-family="Arial, sans-serif" font-size="26" fill="#4b5565">+ Add label</text>
+  <text x="150" y="1010" font-family="Arial, sans-serif" font-size="26" fill="#526174" font-weight="700">Published Date</text>
+  <text x="372" y="1010" font-family="Arial, sans-serif" font-size="26" fill="#5e6b80">13 May 2026</text>
+  <text x="150" y="1090" font-family="Arial, sans-serif" font-size="26" fill="#526174" font-weight="700">No. of Versions</text>
+  <text x="372" y="1090" font-family="Arial, sans-serif" font-size="26" fill="#4081e8">140</text>
+  <text x="150" y="1170" font-family="Arial, sans-serif" font-size="26" fill="#526174" font-weight="700">Vulnerabilities</text>
+  <rect x="372" y="1138" width="72" height="42" rx="4" fill="#ffffff" stroke="#ef4444"/>
+  <text x="401" y="1168" font-family="Arial, sans-serif" font-size="26" fill="#b91c1c">0</text>
+  <rect x="452" y="1138" width="72" height="42" rx="4" fill="#ffffff" stroke="#ef4444"/>
+  <text x="481" y="1168" font-family="Arial, sans-serif" font-size="26" fill="#b91c1c">0</text>
+  <rect x="532" y="1138" width="72" height="42" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="561" y="1168" font-family="Arial, sans-serif" font-size="26" fill="#526174">0</text>
+  <text x="150" y="1250" font-family="Arial, sans-serif" font-size="26" fill="#526174" font-weight="700">Licenses</text>
+  <rect x="372" y="1218" width="72" height="48" rx="7" fill="#e9eef6"/>
+  <text x="386" y="1250" font-family="Arial, sans-serif" font-size="26" fill="#4b5565">MIT</text>
+  <text x="150" y="1330" font-family="Arial, sans-serif" font-size="26" fill="#526174" font-weight="700">OpenSSF Score</text>
+  <rect x="372" y="1298" width="76" height="36" rx="6" fill="#ffffff" stroke="#22c55e"/>
+  <text x="380" y="1324" font-family="Arial, sans-serif" font-size="20" fill="#526174">8.1/10</text>
+
+  <line x1="102" y1="1450" x2="838" y2="1450" stroke="#e5e7eb"/>
+  <text x="102" y="1510" font-family="Arial, sans-serif" font-size="28" fill="#344054" font-weight="700">Install Instructions</text>
+  <rect x="102" y="1545" width="736" height="68" rx="7" fill="#f7f8fb"/>
+  <text x="120" y="1586" font-family="Consolas, monospace" font-size="20" fill="#4b5565">npm install axios@1.16.1</text>
+</svg>
