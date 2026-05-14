@@ -411,7 +411,7 @@ $env:STUDENT_ID = "alex"
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
-$env:BUILD_NAME = "$($env:STUDENT_ID)-npm-curation"
+$env:BUILD_NAME = "$($env:STUDENT_ID)-npm-sample"
 $env:BUILD_NUMBER = "2"
 
 jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
@@ -428,7 +428,7 @@ export STUDENT_ID="alex"
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
-BUILD_NAME="${STUDENT_ID}-npm-curation"
+BUILD_NAME="${STUDENT_ID}-npm-sample"
 BUILD_NUMBER=2
 
 jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
@@ -441,6 +441,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 - CLI 輸出顯示某個套件版本被阻擋，具體為 `axios@1.7.2`。
 - 安裝失敗，或依 policy action 與設定被替換為允許版本。
+- 如果 install 成功，build-info 可在 Artifactory -> Builds -> `<student-id>-npm-sample` -> `#2` 中查看。
 
 CLI 被阻擋輸出示例：
 
@@ -527,7 +528,7 @@ $env:STUDENT_ID = "alex"
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
-$env:BUILD_NAME = "$($env:STUDENT_ID)-npm-remediation"
+$env:BUILD_NAME = "$($env:STUDENT_ID)-npm-sample"
 $env:BUILD_NUMBER = "3"
 
 jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
@@ -545,7 +546,7 @@ export STUDENT_ID="alex"
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
-BUILD_NAME="${STUDENT_ID}-npm-remediation"
+BUILD_NAME="${STUDENT_ID}-npm-sample"
 BUILD_NUMBER=3
 
 jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
@@ -556,5 +557,5 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 在 UI 中驗證：
 
-- Artifactory -> Builds -> `<student-id>-npm-remediation` -> `#3`
+- Artifactory -> Builds -> `<student-id>-npm-sample` -> `#3`
 - Build-info 中的 dependencies 應顯示已使用 `axios@1.16.1`。
