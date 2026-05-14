@@ -1,4 +1,7 @@
 param(
+    [Parameter(Mandatory = $true)]
+    [string]$StudentId,
+
     [ValidateSet("all", "local", "remote", "virtual")]
     [string]$RepoKind = "all"
 )
@@ -6,6 +9,33 @@ param(
 $ErrorActionPreference = "Stop"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+function Format-StudentId {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Value
+    )
+
+    $normalized = $Value.Trim().ToLowerInvariant()
+    if ($normalized -notmatch '^[a-z0-9](?:[a-z0-9-]{1,18}[a-z0-9])$') {
+        throw "Invalid StudentId '$Value'. Use 3-20 lowercase letters, numbers, and hyphens only. Examples: alex, mary-chen, john2."
+    }
+
+    return $normalized
+}
+
+function ConvertTo-StudentRepoName {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$RepoKey,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Prefix
+    )
+
+    $baseName = $RepoKey -replace '^workshop-', ''
+    return "$Prefix-$baseName"
+}
 
 function Test-JFrogCli {
     if (-not (Get-Command jf -ErrorAction SilentlyContinue)) {
@@ -16,7 +46,10 @@ function Test-JFrogCli {
 function Remove-Repositories {
     param(
         [Parameter(Mandatory = $true)]
-        [string]$ValuesFile
+        [string]$ValuesFile,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Prefix
     )
 
     $repos = Get-Content -LiteralPath $ValuesFile -Raw | ConvertFrom-Json
@@ -26,26 +59,28 @@ function Remove-Repositories {
             continue
         }
 
-        Write-Host "Deleting repository: $($repo.key)"
-        & jf rt repo-delete $repo.key --quiet
+        $repoName = ConvertTo-StudentRepoName -RepoKey $repo.key -Prefix $Prefix
+        Write-Host "Deleting repository: $repoName"
+        & jf rt repo-delete $repoName --quiet
     }
 }
 
 Test-JFrogCli
+$StudentPrefix = Format-StudentId -Value $StudentId
 
 switch ($RepoKind) {
     "all" {
-        Remove-Repositories "$ScriptDir\virtual-repo-values.json"
-        Remove-Repositories "$ScriptDir\remote-repo-values.json"
-        Remove-Repositories "$ScriptDir\local-repo-values.json"
+        Remove-Repositories "$ScriptDir\virtual-repo-values.json" -Prefix $StudentPrefix
+        Remove-Repositories "$ScriptDir\remote-repo-values.json" -Prefix $StudentPrefix
+        Remove-Repositories "$ScriptDir\local-repo-values.json" -Prefix $StudentPrefix
     }
     "local" {
-        Remove-Repositories "$ScriptDir\local-repo-values.json"
+        Remove-Repositories "$ScriptDir\local-repo-values.json" -Prefix $StudentPrefix
     }
     "remote" {
-        Remove-Repositories "$ScriptDir\remote-repo-values.json"
+        Remove-Repositories "$ScriptDir\remote-repo-values.json" -Prefix $StudentPrefix
     }
     "virtual" {
-        Remove-Repositories "$ScriptDir\virtual-repo-values.json"
+        Remove-Repositories "$ScriptDir\virtual-repo-values.json" -Prefix $StudentPrefix
     }
 }

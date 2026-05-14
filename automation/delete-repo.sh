@@ -3,18 +3,53 @@
 set -eu
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
-REPO_KIND="${1:-all}"
+STUDENT_ID="${1:-${STUDENT_ID:-}}"
+REPO_KIND="${2:-all}"
+
+normalize_student_id() {
+  value="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+  case "$value" in
+    ""|*[!a-z0-9-]*)
+      echo "Invalid student id: $1. Use 3-20 lowercase letters, numbers, and hyphens only. Examples: alex, mary-chen, john2." >&2
+      exit 1
+      ;;
+  esac
+
+  length="$(printf '%s' "$value" | wc -c | tr -d ' ')"
+  if [ "$length" -lt 3 ] || [ "$length" -gt 20 ] || ! printf '%s' "$value" | grep -Eq '^[a-z0-9].*[a-z0-9]$'; then
+    echo "Invalid student id: $1. Use 3-20 lowercase letters, numbers, and hyphens only. Examples: alex, mary-chen, john2." >&2
+    exit 1
+  fi
+
+  printf '%s' "$value"
+}
+
+if [ -z "$STUDENT_ID" ]; then
+  echo "Usage: $0 <student-id> [all|local|remote|virtual]" >&2
+  echo "Example: $0 alex all" >&2
+  exit 1
+fi
+
+STUDENT_ID="$(normalize_student_id "$STUDENT_ID")"
 
 build_key_lines() {
-  python3 - "$1" <<'PY'
+  python3 - "$1" "$STUDENT_ID" <<'PY'
 import json
 import sys
 
 with open(sys.argv[1], "r", encoding="utf-8") as f:
     data = json.load(f)
 
+prefix = sys.argv[2]
+
+def student_repo_name(key):
+    base = key
+    if base.startswith("workshop-"):
+        base = base[len("workshop-"):]
+    return f"{prefix}-{base}"
+
 for item in data:
-    print(item.get("key", ""))
+    print(student_repo_name(item.get("key", "")))
 PY
 }
 
@@ -43,7 +78,7 @@ case "$REPO_KIND" in
     delete_repos "$SCRIPT_DIR/virtual-repo-values.json"
     ;;
   *)
-    echo "Usage: $0 [all|local|remote|virtual]" >&2
+    echo "Usage: $0 <student-id> [all|local|remote|virtual]" >&2
     exit 1
     ;;
 esac

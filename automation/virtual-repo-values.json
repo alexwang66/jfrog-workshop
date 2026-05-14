@@ -1,11 +1,11 @@
 [
   {
-    "key": "workshop-npm-virtual",
+    "key": "npm-virtual",
     "packageType": "npm",
     "rclass": "virtual",
     "repoLayoutRef": "npm-default",
-    "defaultDeploymentRepo": "workshop-npm-dev-local",
-    "externalDependenciesRemoteRepo": "workshop-npm-remote",
-    "repositories": "workshop-npm-dev-local,workshop-npm-qa-local,workshop-npm-prod-local,workshop-npm-remote"
+    "defaultDeploymentRepo": "npm-dev-local",
+    "externalDependenciesRemoteRepo": "npm-remote",
+    "repositories": "npm-dev-local,npm-qa-local,npm-prod-local,npm-remote"
   }
 ]

@@ -5,6 +5,9 @@
   <text x="64" y="128" font-family="Arial, sans-serif" font-size="18" fill="#667085">Template</text>
   <rect x="64" y="150" width="470" height="54" rx="6" fill="#eff8ff" stroke="#1570ef" stroke-width="2"/>
   <text x="88" y="184" font-family="Arial, sans-serif" font-size="18" fill="#175cd3" font-weight="700">Block Specific Package Versions</text>
+  <text x="650" y="148" font-family="Arial, sans-serif" font-size="16" fill="#667085">Condition name</text>
+  <rect x="650" y="170" width="330" height="46" rx="6" fill="#ffffff" stroke="#d0d5dd"/>
+  <text x="672" y="200" font-family="Arial, sans-serif" font-size="18" fill="#344054">&lt;student-id&gt;-axios-1.7.2</text>
   <text x="64" y="258" font-family="Arial, sans-serif" font-size="16" fill="#667085">Package type</text>
   <rect x="64" y="280" width="250" height="46" rx="6" fill="#ffffff" stroke="#d0d5dd"/>
   <text x="86" y="310" font-family="Arial, sans-serif" font-size="18" fill="#344054">npm</text>

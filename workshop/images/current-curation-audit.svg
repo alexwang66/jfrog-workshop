@@ -1,23 +1,73 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="540" viewBox="0 0 1180 540">
-  <rect width="1180" height="540" fill="#f7f9fc"/>
-  <rect x="32" y="32" width="1116" height="476" rx="10" fill="#ffffff" stroke="#d8dee9"/>
-  <text x="64" y="82" font-family="Arial, sans-serif" font-size="30" fill="#344054" font-weight="700">Curation / Audit Events</text>
-  <rect x="64" y="120" width="210" height="46" rx="6" fill="#344054"/>
-  <text x="118" y="150" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" font-weight="700">Blocked</text>
-  <rect x="292" y="120" width="210" height="46" rx="6" fill="#ffffff" stroke="#d0d5dd"/>
-  <text x="352" y="150" font-family="Arial, sans-serif" font-size="18" fill="#667085">Approved</text>
-  <line x1="64" y1="222" x2="1114" y2="222" stroke="#d0d5dd"/>
-  <text x="82" y="260" font-family="Arial, sans-serif" font-size="15" fill="#667085">Time</text>
-  <text x="280" y="260" font-family="Arial, sans-serif" font-size="15" fill="#667085">Reason</text>
-  <text x="520" y="260" font-family="Arial, sans-serif" font-size="15" fill="#667085">Package Type</text>
-  <text x="700" y="260" font-family="Arial, sans-serif" font-size="15" fill="#667085">Package Name</text>
-  <text x="890" y="260" font-family="Arial, sans-serif" font-size="15" fill="#667085">Package Version</text>
-  <line x1="64" y1="282" x2="1114" y2="282" stroke="#d0d5dd"/>
-  <text x="82" y="326" font-family="Arial, sans-serif" font-size="18" fill="#344054">2026-05-13 17:52</text>
-  <text x="280" y="326" font-family="Arial, sans-serif" font-size="18" fill="#b42318" font-weight="700">Policy violations</text>
-  <text x="520" y="326" font-family="Arial, sans-serif" font-size="18" fill="#344054">npm</text>
-  <text x="700" y="326" font-family="Arial, sans-serif" font-size="18" fill="#344054" font-weight="700">axios</text>
-  <text x="890" y="326" font-family="Arial, sans-serif" font-size="18" fill="#344054">1.7.2</text>
-  <rect x="280" y="366" width="520" height="44" rx="6" fill="#fef3f2"/>
-  <text x="304" y="394" font-family="Arial, sans-serif" font-size="16" fill="#b42318">Policy: Block Specific Package Versions - axios 1.7.2</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="536" viewBox="0 0 2048 536">
+  <rect width="2048" height="536" fill="#ffffff"/>
+  <text x="25" y="43" font-family="Arial, sans-serif" font-size="30" fill="#333333" font-weight="700">Audit Events</text>
+  <text x="218" y="42" font-family="Arial, sans-serif" font-size="16" fill="#5f6675">Last Updated: 14-05-26 22:03:40 +0800</text>
+  <text x="556" y="42" font-family="Arial, sans-serif" font-size="17" fill="#344054">↻</text>
+  <rect x="1742" y="20" width="306" height="34" rx="4" fill="#ffffff" stroke="#d7dce5"/>
+  <text x="1756" y="42" font-family="Arial, sans-serif" font-size="16" fill="#667085">Today</text>
+
+  <rect x="25" y="79" width="2023" height="77" fill="#f1f5f9"/>
+  <rect x="40" y="94" width="1868" height="48" rx="4" fill="#ffffff"/>
+  <text x="88" y="125" font-family="Arial, sans-serif" font-size="17" fill="#c8d1e4">Search for events by package name</text>
+  <rect x="1918" y="94" width="130" height="48" rx="4" fill="#e6ebf2"/>
+  <text x="1965" y="125" font-family="Arial, sans-serif" font-size="17" fill="#7b8495">Search</text>
+
+  <text x="26" y="206" font-family="Arial, sans-serif" font-size="24" fill="#344054" font-weight="700">Latest Audit Events</text>
+
+  <rect x="24" y="242" width="2024" height="294" fill="#ffffff"/>
+  <rect x="64" y="279" width="850" height="40" rx="4" fill="#ffffff" stroke="#e1e6ef"/>
+  <rect x="69" y="284" width="204" height="28" rx="4" fill="#405b86"/>
+  <text x="128" y="305" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" font-weight="700">Blocked</text>
+  <text x="129" y="305" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" font-weight="700">Blocked</text>
+  <text x="130" y="305" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" font-weight="700">Blocked</text>
+  <text x="128" y="304" font-family="Arial, sans-serif" font-size="17" fill="#ffffff">⊘</text>
+  <text x="336" y="304" font-family="Arial, sans-serif" font-size="18" fill="#344054">● Approved</text>
+  <text x="336" y="304" font-family="Arial, sans-serif" font-size="18" fill="#2fac66">●</text>
+  <text x="552" y="304" font-family="Arial, sans-serif" font-size="18" fill="#344054">▲ Dry Run</text>
+  <text x="552" y="304" font-family="Arial, sans-serif" font-size="18" fill="#f59e0b">▲</text>
+  <text x="764" y="304" font-family="Arial, sans-serif" font-size="18" fill="#344054">● Passed</text>
+  <text x="764" y="304" font-family="Arial, sans-serif" font-size="18" fill="#98a2b3">●</text>
+
+  <rect x="1836" y="282" width="32" height="32" rx="5" fill="#e6ebf2"/>
+  <text x="1845" y="304" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">⚙</text>
+  <rect x="1878" y="282" width="150" height="32" rx="5" fill="#e6ebf2"/>
+  <text x="1896" y="304" font-family="Arial, sans-serif" font-size="15" fill="#111827">⇥ Export to CSV</text>
+
+  <text x="74" y="371" font-family="Arial, sans-serif" font-size="13" fill="#16a36a" font-weight="700">Time</text>
+  <text x="336" y="371" font-family="Arial, sans-serif" font-size="13" fill="#667085">Reason</text>
+  <text x="554" y="371" font-family="Arial, sans-serif" font-size="13" fill="#667085">Package Type</text>
+  <text x="728" y="371" font-family="Arial, sans-serif" font-size="13" fill="#667085">Package Name</text>
+  <text x="936" y="371" font-family="Arial, sans-serif" font-size="13" fill="#667085">Package Version</text>
+  <text x="1092" y="371" font-family="Arial, sans-serif" font-size="13" fill="#667085">Policies Name</text>
+  <text x="1334" y="371" font-family="Arial, sans-serif" font-size="13" fill="#667085">Conditions</text>
+  <text x="1686" y="371" font-family="Arial, sans-serif" font-size="13" fill="#667085">Requester Name</text>
+  <text x="1880" y="371" font-family="Arial, sans-serif" font-size="13" fill="#667085">Requester Email</text>
+  <line x1="64" y1="391" x2="2028" y2="391" stroke="#edf0f5"/>
+
+  <text x="74" y="427" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">14-05-26 21:47:28 +0800</text>
+  <text x="336" y="427" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">Policy violations</text>
+  <rect x="555" y="404" width="34" height="34" rx="5" fill="#f3f6fb"/>
+  <text x="558" y="426" font-family="Arial, sans-serif" font-size="13" fill="#ff4b3e" font-weight="700">npm</text>
+  <text x="598" y="427" font-family="Arial, sans-serif" font-size="18" fill="#4b5565">Npm</text>
+  <text x="728" y="427" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">axios</text>
+  <text x="936" y="427" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">1.7.2</text>
+  <text x="1092" y="427" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">block-axios172</text>
+  <text x="1341" y="427" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">♢ block-axios-172</text>
+  <circle cx="1704" cy="420" r="17" fill="#eef4ff" stroke="#6b8fc5"/>
+  <text x="1697" y="426" font-family="Arial, sans-serif" font-size="16" fill="#416da3">W</text>
+  <text x="1880" y="427" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">wangq@jfrog.com</text>
+  <line x1="64" y1="449" x2="2028" y2="449" stroke="#edf0f5"/>
+
+  <text x="74" y="486" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">14-05-26 21:45:10 +0800</text>
+  <text x="336" y="486" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">Policy violations</text>
+  <rect x="555" y="463" width="34" height="34" rx="5" fill="#f3f6fb"/>
+  <text x="558" y="485" font-family="Arial, sans-serif" font-size="13" fill="#ff4b3e" font-weight="700">npm</text>
+  <text x="598" y="486" font-family="Arial, sans-serif" font-size="18" fill="#4b5565">Npm</text>
+  <text x="728" y="486" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">axios</text>
+  <text x="936" y="486" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">1.7.2</text>
+  <text x="1092" y="486" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">block-axios172</text>
+  <text x="1341" y="486" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">♢ block-axios-172</text>
+  <circle cx="1704" cy="479" r="17" fill="#eef4ff" stroke="#6b8fc5"/>
+  <text x="1697" y="485" font-family="Arial, sans-serif" font-size="16" fill="#416da3">W</text>
+  <text x="1880" y="486" font-family="Arial, sans-serif" font-size="17" fill="#4b5565">wangq@jfrog.com</text>
 </svg>

@@ -17,7 +17,6 @@
 - **安裝 JFrog CLI**
   - 開啟 `https://jfrog.com/getcli/`
   - 依照作業系統下載並安裝對應套件。
-
 - **安裝 Node.js 20.x LTS**
   - 開啟 `https://nodejs.org/`，安裝 **LTS 20.x** 版本。
   - **Windows 注意事項：** 安裝時建議勾選 “Add to PATH”，安裝完成後重新開啟 PowerShell 或 CMD，再執行 `node -v`。
@@ -43,10 +42,12 @@ npm -v
 先登入你的 JFrog Platform 實例並產生 Access Token。
 
 官方參考文件：
+
 - Access Tokens：`https://docs.jfrog.com/administration/docs/access-tokens`
 - JFrog CLI Configuration：`https://docs.jfrog.com/integrations/docs/configuring-the-cli`
 
 在 JFrog Platform UI 中：
+
 1. 開啟你的 JFrog Platform 位址，例如 `https://<your-jfrog-domain>`。
 2. 進入 Administration -> Security -> Access Tokens。
 3. 點擊 Generate Token，為目前使用者建立 Access Token。
@@ -105,32 +106,66 @@ cd jfrog-workshop
 
 在 `automation` 目錄執行建立 repository 的腳本。
 
+每位學員使用自己的英文名作為 `STUDENT_ID` 前綴，以避免多人共用 lab 時互相覆蓋 repository、remote cache、build-info 或 Curation policy。
+
+命名規則：
+
+- 僅使用小寫英文字母、數字與連字符 `-`
+- 長度 3-20 個字元
+- 不使用空格、中文或特殊符號
+- 如果英文名重複，請加上姓氏或數字，例如 `alex-wang`、`alex2`
+
+範例：如果學員英文名是 Alex，請使用 `alex`。
+
 Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/automation
-.\create-repo.ps1
+$env:STUDENT_ID = "alex"
+.\create-repo.ps1 -StudentId $env:STUDENT_ID
 ```
 
 如果 PowerShell 執行原則阻擋腳本，可在目前終端機暫時允許腳本後重試：
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\create-repo.ps1
+.\create-repo.ps1 -StudentId $env:STUDENT_ID
 ```
 
 macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/automation
+export STUDENT_ID="alex"
 chmod +x ./create-repo.sh
-./create-repo.sh all
+./create-repo.sh "$STUDENT_ID" all
 ```
 
 腳本會建立以下 npm repositories：
-- Resolve repository：`workshop-npm-virtual`（virtual）
-- Remote repository：`workshop-npm-remote`（remote，指向 npmjs）
-- Deploy repository：`workshop-npm-dev-local`（local）
+
+- Resolve repository：`<student-id>-npm-virtual`（virtual）
+- Remote repository：`<student-id>-npm-remote`（remote，指向 npmjs）
+- Deploy repository：`<student-id>-npm-dev-local`（local）
+- QA repository：`<student-id>-npm-qa-local`（local）
+- Prod repository：`<student-id>-npm-prod-local`（local）
+
+如需清理某位學員的 repository，使用相同的 `STUDENT_ID` 執行刪除腳本：
+
+Windows PowerShell：
+
+```powershell
+cd ~/jfrog-workshop/automation
+$env:STUDENT_ID = "alex"
+.\delete-repo.ps1 -StudentId $env:STUDENT_ID
+```
+
+macOS / Linux：
+
+```bash
+cd ~/jfrog-workshop/automation
+export STUDENT_ID="alex"
+./delete-repo.sh "$STUDENT_ID" all
+```
 
 ---
 
@@ -142,6 +177,7 @@ Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
+$env:STUDENT_ID = "alex"
 Get-Content .\package.json
 ```
 
@@ -149,6 +185,7 @@ macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
+export STUDENT_ID="alex"
 cat ./package.json
 ```
 
@@ -162,8 +199,8 @@ Windows PowerShell：
 jf npm-config `
   --server-id-resolve=Artifactory `
   --server-id-deploy=Artifactory `
-  --repo-resolve=workshop-npm-virtual `
-  --repo-deploy=workshop-npm-dev-local `
+  --repo-resolve="$($env:STUDENT_ID)-npm-virtual" `
+  --repo-deploy="$($env:STUDENT_ID)-npm-dev-local" `
   --global=false
 ```
 
@@ -173,8 +210,8 @@ macOS / Linux：
 jf npm-config \
   --server-id-resolve=Artifactory \
   --server-id-deploy=Artifactory \
-  --repo-resolve=workshop-npm-virtual \
-  --repo-deploy=workshop-npm-dev-local \
+  --repo-resolve="${STUDENT_ID}-npm-virtual" \
+  --repo-deploy="${STUDENT_ID}-npm-dev-local" \
   --global=false
 ```
 
@@ -203,7 +240,7 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 Windows PowerShell：
 
 ```powershell
-$env:BUILD_NAME = "npm-sample"
+$env:BUILD_NAME = "$($env:STUDENT_ID)-npm-sample"
 $env:BUILD_NUMBER = "1"
 
 jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
@@ -217,7 +254,7 @@ jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
 macOS / Linux：
 
 ```bash
-BUILD_NAME=npm-sample
+BUILD_NAME="${STUDENT_ID}-npm-sample"
 BUILD_NUMBER=1
 
 jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
@@ -229,7 +266,8 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 ```
 
 在 UI 中驗證：
-- Artifactory -> Builds -> `npm-sample` -> `#1`
+
+- Artifactory -> Builds -> `<student-id>-npm-sample` -> `#1`
 
 ---
 
@@ -237,7 +275,20 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 本工作坊 **將 `axios@1.7.2` 視為模擬惡意套件版本**。目標是讓 `npm install` 透過 JFrog Curation 解析到該版本時被阻擋。
 
-### 5.1 確認專案依賴此版本
+### 5.1 啟用 Remote Repository 的 Curation
+
+先確認學員自己的 remote repository 已啟用 Curation，後續 policy 才能對下載請求生效。
+
+- 進入 Administration -> Curation -> Remote Repositories，或依你的 UI 版本進入類似頁面。
+- 找到 `<student-id>-npm-remote`，確認 Curation 已啟用。
+
+示例：
+
+Enable Curation Remote Repository
+
+不同 JFrog Platform 版本的 UI 標籤可能略有差異，請以你的實例畫面為準。
+
+### 5.2 確認專案依賴此版本
 
 在 `~/jfrog-workshop/npm-sample/package.json` 中，確認存在以下依賴：
 
@@ -265,19 +316,21 @@ npm cache clean --force
 test ! -f ./package-lock.json && echo "package-lock.json removed"
 ```
 
-### 5.2 在 JFrog UI 建立 Curation Policy
+### 5.3 在 JFrog UI 建立 Curation Policy
 
 先建立 Custom Condition，再將它用於 Curation Policy。
 
-#### 5.2.1 建立 Custom Condition
+#### 5.3.1 建立 Custom Condition
 
 官方參考文件：`https://docs.jfrog.com/security/docs/create-custom-conditions`
 
 在 JFrog UI 中：
+
 - 進入 Administration -> Curation Settings -> **Conditions**。
 - 點擊 **Create Condition**。
 - 選擇 **Block Specific Package Versions** 範本。
 - 設定：
+  - Condition name：`<student-id>-axios-1.7.2`
   - Package type：`npm`
   - Package：`axios`
   - Version：`1.7.2`
@@ -285,61 +338,54 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 示例：
 
-![Create Curation Condition](./workshop/images/current-curation-condition.svg)
+Create Curation Condition
 
-#### 5.2.2 建立 Policy 並套用到 NPM Remote Repository
+#### 5.3.2 建立 Policy 並套用到 NPM Remote Repository
 
 在 JFrog UI 中：
+
 - 進入 Administration -> Curation -> **Policies Management**。
 - 建立 policy：
-  - Scope：選擇 **Specific remote repositories**，並選取 `workshop-npm-remote`。
+  - Policy name：`<student-id>-npm-curation-policy`
+  - Scope：選擇 **Specific remote repositories**，並選取 `<student-id>-npm-remote`。
   - Condition：選擇剛建立的 `axios 1.7.2` custom condition。
   - Action：**Block**。
 - 儲存 policy。
 
 示例：
 
-![Create Curation Policy](./workshop/images/current-curation-policy.svg)
+Create Curation Policy
 
-確認 remote repository 已啟用 Curation：
-- 進入 Administration -> Curation -> Remote Repositories，或依你的 UI 版本進入類似頁面。
-- 找到 `workshop-npm-remote`，確認 Curation 已啟用。
-
-示例：
-
-![Enable Curation Remote Repository](./workshop/images/current-curation-remote.svg)
-
-不同 JFrog Platform 版本的 UI 標籤可能略有差異，請以你的實例畫面為準。
-
-### 5.3 從 Artifactory Remote Cache 刪除已快取的 `axios`
+### 5.4 從 Artifactory Remote Cache 刪除已快取的 `axios`
 
 如果 `axios@1.7.2` 在建立 Curation policy 前已被下載，Artifactory 可能已將它快取到 remote cache repository。重新安裝前需先刪除該快取套件。
 
 官方參考文件：
+
 - Remote Repositories：`https://docs.jfrog.com/artifactory/docs/remote-repositories`
 - Managing Artifacts：`https://docs.jfrog.com/artifactory/docs/managing-artifacts`
 
 在 JFrog UI 中：
+
 1. 進入 Artifactory -> Artifacts。
-2. 開啟 remote cache repository：`workshop-npm-remote-cache`。
+2. 開啟 remote cache repository：`<student-id>-npm-remote-cache`。
 3. 找到 `axios`。
 4. 右鍵點擊 `axios`，選擇 Delete / Delete Content。
 5. 確認刪除。
 
-示例：
 
-![Delete Axios From Remote Cache](./workshop/images/current-remote-cache-delete.svg)
 
-### 5.4 重新執行 Install 並觀察阻擋
+### 5.5 重新執行 Install 並觀察阻擋
 
 Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
+$env:STUDENT_ID = "alex"
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
-$env:BUILD_NAME = "npm-curation"
+$env:BUILD_NAME = "$($env:STUDENT_ID)-npm-curation"
 $env:BUILD_NUMBER = "2"
 
 jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
@@ -352,10 +398,11 @@ macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
+export STUDENT_ID="alex"
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
-BUILD_NAME=npm-curation
+BUILD_NAME="${STUDENT_ID}-npm-curation"
 BUILD_NUMBER=2
 
 jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
@@ -365,23 +412,25 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 ```
 
 預期結果：
+
 - CLI 輸出顯示某個套件版本被阻擋，具體為 `axios@1.7.2`。
 - 安裝失敗，或依 policy action 與設定被替換為允許版本。
-- 如果 install 成功，可在 Builds -> `npm-curation` -> `#2` 查看 build-info。
 
 CLI 被阻擋輸出示例：
+
 
 ![Curation CLI Blocked](./workshop/images/current-cli-blocked.svg)
 
 如果輸出類似 `added 28 packages`，表示 npm 已成功安裝依賴，Curation 沒有阻擋本次下載。請檢查：
+
 - Policy 是否已儲存並啟用。
 - Policy action 是否為 **Block**，而不是 Dry Run 或僅 audit。
-- Policy scope 是否包含 `workshop-npm-remote`。
-- Administration -> Curation -> Remote Repositories 是否顯示 `workshop-npm-remote` 為 Connected / Curated。
-- `workshop-npm-remote` 是否已啟用 Xray indexing。官方 On-Demand Curation 文件建議同時確認 remote repository 已啟用 Curation 與 Xray indexing。
+- Policy scope 是否包含 `<student-id>-npm-remote`。
+- Administration -> Curation -> Remote Repositories 是否顯示 `<student-id>-npm-remote` 為 Connected / Curated。
+- `<student-id>-npm-remote` 是否已啟用 Xray indexing。官方 On-Demand Curation 文件建議同時確認 remote repository 已啟用 Curation 與 Xray indexing。
 - Custom condition 是否精確匹配 Package type `npm`、Package `axios`、Version `1.7.2`。
 - 本機 `node_modules` 與 `package-lock.json` 是否已刪除，並已執行 `npm cache clean --force`。
-- Artifactory -> Artifacts -> `workshop-npm-remote-cache` 中是否已不再包含 `axios`。
+- Artifactory -> Artifacts -> `<student-id>-npm-remote-cache` 中是否已不再包含 `axios`。
 - Curation audit/events 是否出現本次下載事件。若沒有事件，通常表示該 repository 尚未由 Curation 接管。若事件顯示 No Policy Violation，通常表示 policy condition、scope 或 action 未匹配。
 
 Curation audit event 示例：

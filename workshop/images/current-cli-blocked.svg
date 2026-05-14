@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1180" height="420" viewBox="0 0 1180 420">
   <rect width="1180" height="420" fill="#101828"/>
-  <text x="32" y="54" font-family="Consolas, monospace" font-size="20" fill="#d0d5dd">PS D:\jfrog\code\jfrog-devopsdays-workshop\npm-sample&gt; jf npm install --build-name=npm-curation --build-number=2</text>
-  <text x="32" y="104" font-family="Consolas, monospace" font-size="20" fill="#7cd4fd">[Info] Trace ID for JFrog Platform logs: 1234567890abcdef</text>
-  <text x="32" y="154" font-family="Consolas, monospace" font-size="20" fill="#f97066">npm error 403 Forbidden - GET .../workshop-npm-virtual/axios/-/axios-1.7.2.tgz</text>
-  <text x="32" y="204" font-family="Consolas, monospace" font-size="20" fill="#f97066">npm error package axios:1.7.2 download was blocked by JFrog Curation</text>
-  <text x="32" y="254" font-family="Consolas, monospace" font-size="20" fill="#f97066">npm error policy violation: Block Specific Package Versions / axios 1.7.2</text>
-  <text x="32" y="316" font-family="Consolas, monospace" font-size="18" fill="#d0d5dd">Expected: install fails before the blocked package is downloaded.</text>
+  <text x="32" y="54" font-family="Consolas, monospace" font-size="18" fill="#d0d5dd">PS ...\npm-sample&gt; jf npm install --build-name=&lt;student-id&gt;-npm-curation --build-number=2</text>
+  <text x="32" y="104" font-family="Consolas, monospace" font-size="18" fill="#f97066">21:47:28 [Error] error while running 'C:\Program Files\nodejs\npm.cmd install': exit status 1</text>
+  <text x="32" y="154" font-family="Consolas, monospace" font-size="18" fill="#f97066">npm error config prefix cannot be changed from project config:</text>
+  <text x="32" y="194" font-family="Consolas, monospace" font-size="18" fill="#f97066">D:\jfrog\code\jfrog-devopsdays-workshop\npm-sample\.npmrc.</text>
+  <text x="32" y="244" font-family="Consolas, monospace" font-size="18" fill="#f97066">npm notice package axios:1.7.2 download was blocked by jfrog packages curation service</text>
+  <text x="32" y="284" font-family="Consolas, monospace" font-size="18" fill="#f97066">due to policies violated {block-axios172, block-axios-172, pre-defined banned list}</text>
+  <text x="32" y="346" font-family="Consolas, monospace" font-size="18" fill="#d0d5dd">Expected: install fails before the blocked package is downloaded.</text>
 </svg>

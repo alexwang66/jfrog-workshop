@@ -1,5 +1,5 @@
 [
-    {"key":"workshop-npm-dev-local","packageType":"npm","rclass":"local","repoLayoutRef":"npm-default", "xrayIndex":"true"},
-    {"key":"workshop-npm-qa-local","packageType":"npm","rclass":"local","repoLayoutRef":"npm-default", "xrayIndex":"true"},
-    {"key":"workshop-npm-prod-local","packageType":"npm","rclass":"local","repoLayoutRef":"npm-default", "xrayIndex":"true"}
+    {"key":"npm-dev-local","packageType":"npm","rclass":"local","repoLayoutRef":"npm-default", "xrayIndex":"true"},
+    {"key":"npm-qa-local","packageType":"npm","rclass":"local","repoLayoutRef":"npm-default", "xrayIndex":"true"},
+    {"key":"npm-prod-local","packageType":"npm","rclass":"local","repoLayoutRef":"npm-default", "xrayIndex":"true"}
   ]
