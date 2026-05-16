@@ -8,6 +8,7 @@
 
 - JFrog Cloud 試用帳號：`https://jfrog.com/start-free/`
 - 本機需安裝：
+  - VS Code 或 Cursor（建議，用於開啟專案與執行內建終端機）
   - JFrog CLI（`jf`）
   - Git（`git`）
   - Node.js 20.x LTS，包含 `npm`
@@ -106,16 +107,9 @@ cd jfrog-workshop
 
 在 `automation` 目錄執行建立 repository 的腳本。
 
-每位學員使用自己的英文名作為 `STUDENT_ID` 前綴，以避免多人共用 lab 時互相覆蓋 repository、remote cache、build-info 或 Curation policy。
+每位學員請使用自己的英文名作為 `STUDENT_ID`，這個值會作為 repository 前綴，避免多人共用 lab 時互相覆蓋。
 
-命名規則：
-
-- 僅使用小寫英文字母、數字與連字符 `-`
-- 長度 3-20 個字元
-- 不使用空格、中文或特殊符號
-- 如果英文名重複，請加上姓氏或數字，例如 `alex-wang`、`alex2`
-
-範例：如果學員英文名是 Alex，請使用 `alex`。
+範例：如果你的英文名是 Alex，請將 `STUDENT_ID` 設為 `alex`，然後執行下面的建立腳本。
 
 Windows PowerShell：
 
