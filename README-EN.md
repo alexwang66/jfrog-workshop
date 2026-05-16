@@ -8,6 +8,7 @@ Goal: Complete an **npm build + build-info publication** on a customer machine, 
 
 - JFrog Cloud trial account: `https://jfrog.com/start-free/`
 - Required local tools:
+  - VS Code or Cursor (recommended, for opening the project and running the integrated terminal)
   - JFrog CLI (`jf`)
   - Git (`git`)
   - Node.js 20.x LTS, including `npm`
@@ -105,15 +106,9 @@ cd jfrog-workshop
 
 Run the repository creation script from the automation directory.
 
-Each student uses their English name as the `STUDENT_ID` prefix. This prevents multiple students from overwriting each other’s repositories, remote cache, build-info, or Curation policy.
+Each student should use their English name as `STUDENT_ID`. This value becomes the repository prefix and prevents students from overwriting each other in a shared lab.
 
-Naming rules:
-- Use lowercase English letters, numbers, and hyphens only.
-- Use 3-20 characters.
-- Do not use spaces, Chinese characters, or special characters.
-- If names are duplicated, add a last name or number, for example `alex-wang` or `alex2`.
-
-Example: if the student’s English name is Alex, use `alex`.
+Example: if your English name is Alex, set `STUDENT_ID` to `alex`, then run the creation script below.
 
 Windows PowerShell:
 
