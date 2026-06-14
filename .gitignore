@@ -46,3 +46,12 @@ build/
 *.pem
 python/dist/
 dotnet-sample/obj/
+
+### Office temp/lock files ###
+.~*.ppt
+.~*.pptx
+**/.~lock.*#
+
+### Claude Code local/personal config (contains tokens, paths) ###
+.claude/settings.local.json
+.claude/launch.json
