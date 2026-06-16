@@ -46,20 +46,15 @@ npm -v
 - Access Tokens：`https://docs.jfrog.com/administration/docs/access-tokens`
 - JFrog CLI Configuration：`https://docs.jfrog.com/integrations/docs/configuring-the-cli`
 
-在 JFrog Platform UI 中：
+在 JFrog Platform UI 中產生 Access Token：
 
-1. 開啟你的 JFrog Platform 位址，例如 `https://<your-jfrog-domain>`。
-2. 進入 Administration -> Security -> Access Tokens。
-3. 點擊 Generate Token，為目前使用者建立 Access Token。
-4. 複製並妥善保存 token，後續 JFrog CLI 會使用它。
+1. 開啟 Access Token 頁面：`https://<your-jfrog-domain>/ui/admin/configuration/security/access_tokens`
+2. 點擊 **Generate Token**。
+3. 在彈出視窗中**直接點擊 Generate 產生**，不需要任何額外設定。
+4. 複製並妥善保存產生的 token。
+5. 將 token 寫入下方終端機的環境變數 `JFROG_ACCESS_TOKEN`，供 JFrog CLI 使用。
 
-Access Token 頁面 URL 格式：
-
-```text
-https://<your-jfrog-domain>/ui/admin/configuration/security/access_tokens
-```
-
-`<your-jfrog-domain>` 是你的 JFrog Platform 網域，例如 `company.jfrog.io`。
+> `<your-jfrog-domain>` 為你的 JFrog Platform 網域（例如 `company.jfrog.io`，以講師提供為準）。
 
 使用一條命令設定 JFrog CLI。Server ID 固定為 `Artifactory`。
 
@@ -84,6 +79,7 @@ jf c add Artifactory --url="$JFROG_URL" --access-token="$JFROG_ACCESS_TOKEN" --i
 驗證設定：
 
 ```bash
+jf c use Artifactory
 jf c show
 jf rt ping
 ```
@@ -106,15 +102,15 @@ cd jfrog-workshop
 
 在 `automation` 目錄執行建立 repository 的腳本。
 
-每位學員請使用自己的英文名作為 `STUDENT_ID`，這個值會作為 repository 前綴，避免多人共用 lab 時互相覆蓋。
+每位學員請使用**自己的 user id**（登入帳號）作為 `STUDENT_ID`，這個值會作為 repository 前綴，避免多人共用 lab 時互相覆蓋。
 
-範例：如果你的英文名是 Alex，請將 `STUDENT_ID` 設為 `alex`，然後執行下面的建立腳本。
+範例：如果你的 user id 是 `labuser-t4-s3`，請將 `STUDENT_ID` 設為 `labuser-t4-s3`，然後執行下面的建立腳本。
 
 Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/automation
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 .\create-repo.ps1 -StudentId $env:STUDENT_ID
 ```
 
@@ -129,7 +125,7 @@ macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/automation
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 chmod +x ./create-repo.sh
 ./create-repo.sh "$STUDENT_ID" all
 ```
@@ -148,7 +144,7 @@ Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/automation
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 .\delete-repo.ps1 -StudentId $env:STUDENT_ID
 ```
 
@@ -156,7 +152,7 @@ macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/automation
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 ./delete-repo.sh "$STUDENT_ID" all
 ```
 
@@ -164,13 +160,15 @@ export STUDENT_ID="alex"
 
 ## 4. NPM 建置、發布與 Build-Info
 
+本工作坊 **將 `axios@1.7.2` 視為模擬惡意套件版本**。目標是讓 `npm install` 透過 JFrog Curation 解析到該版本時被阻擋。
+
 進入範例專案目錄。
 
 Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 Get-Content .\package.json
 ```
 
@@ -178,7 +176,7 @@ macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 cat ./package.json
 ```
 
@@ -265,8 +263,6 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 ---
 
 ## 5. Curation 示範：阻擋 `axios@1.7.2`
-
-本工作坊 **將 `axios@1.7.2` 視為模擬惡意套件版本**。目標是讓 `npm install` 透過 JFrog Curation 解析到該版本時被阻擋。
 
 ### 5.1 啟用 Remote Repository 的 Curation
 
@@ -400,7 +396,7 @@ Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
@@ -418,7 +414,7 @@ macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
@@ -437,6 +433,12 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 - CLI 輸出顯示某個套件版本被阻擋，具體為 `axios@1.7.2`。
 - 安裝失敗，或依 policy action 與設定被替換為允許版本。
 - 如果 install 成功，build-info 可在 Artifactory -> Builds -> `<student-id>-npm-sample` -> `#2` 中查看。
+
+你也可以在 Xray 掃描 build #2（Xray -> Scans List -> `<student-id>-npm-sample` -> `2`），會看到專案因引入模擬惡意版本 `axios 1.7.2` 而帶有大量漏洞：
+
+![Xray 掃描：axios 1.7.2 漏洞](./workshop/images/current-xray-axios-172.svg)
+
+> 上圖顯示 build #2 共 **32 個漏洞**，且**漏洞最多的元件就是 `axios 1.7.2`**（本 Lab 的模擬惡意版本）。這正說明了為何要用 Curation 在下載源頭阻擋它。
 
 CLI 被阻擋輸出示例：
 
@@ -485,7 +487,7 @@ Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 
 notepad .\package.json
 Get-Content .\package.json
@@ -495,7 +497,7 @@ macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 
 nano package.json
 cat package.json
@@ -518,7 +520,7 @@ Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
@@ -537,7 +539,7 @@ macOS / Linux：
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 
 rm -rf node_modules package-lock.json
 npm cache clean --force

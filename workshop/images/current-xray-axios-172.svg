@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1820" height="760" viewBox="0 0 1820 760">
+  <rect width="1820" height="760" fill="#ffffff"/>
+
+  <!-- left rail -->
+  <rect x="0" y="0" width="250" height="760" fill="#f8fafc" stroke="#e7ecf3"/>
+  <text x="24" y="60" font-family="Arial, sans-serif" font-size="15" fill="#98a2b3">Scan Name</text>
+  <text x="24" y="86" font-family="Arial, sans-serif" font-size="17" fill="#1d2939" font-weight="700">labuser-t4-s3-npm-sample/2</text>
+  <text x="24" y="150" font-family="Arial, sans-serif" font-size="16" fill="#475467">Overview</text>
+  <text x="24" y="196" font-family="Arial, sans-serif" font-size="16" fill="#475467">Policy Violations   0</text>
+  <text x="24" y="242" font-family="Arial, sans-serif" font-size="16" fill="#475467">SBOM   29</text>
+  <rect x="12" y="270" width="226" height="40" rx="6" fill="#eef2f7"/>
+  <text x="24" y="296" font-family="Arial, sans-serif" font-size="16" fill="#1d2939" font-weight="700">Security Issues   32</text>
+  <rect x="24" y="324" width="214" height="34" rx="6" fill="#fdeaea"/>
+  <text x="40" y="347" font-family="Arial, sans-serif" font-size="15" fill="#c0392b" font-weight="700">Vulnerabilities   32</text>
+  <text x="40" y="390" font-family="Arial, sans-serif" font-size="15" fill="#667085">Malicious Packages   0</text>
+  <text x="40" y="428" font-family="Arial, sans-serif" font-size="15" fill="#667085">Secrets   0</text>
+  <text x="40" y="466" font-family="Arial, sans-serif" font-size="15" fill="#667085">Services   0</text>
+  <text x="40" y="504" font-family="Arial, sans-serif" font-size="15" fill="#667085">Applications   0</text>
+
+  <!-- breadcrumb -->
+  <text x="280" y="46" font-family="Arial, sans-serif" font-size="16" fill="#667085">All Projects  ›  Xray  ›  Scans List  ›  </text>
+  <text x="640" y="46" font-family="Arial, sans-serif" font-size="16" fill="#1d2939" font-weight="700">labuser-t4-s3-npm-sample</text>
+  <text x="930" y="46" font-family="Arial, sans-serif" font-size="16" fill="#667085">  ›  2</text>
+
+  <!-- summary cards -->
+  <g font-family="Arial, sans-serif">
+    <rect x="280" y="74" width="358" height="120" rx="8" fill="#ffffff" stroke="#e1e6ef"/>
+    <text x="300" y="110" font-size="16" fill="#475467">Critical &amp; High Vulnerabilities</text>
+    <text x="300" y="158" font-size="40" fill="#1d2939" font-weight="700">20</text>
+    <rect x="300" y="174" width="318" height="6" rx="3" fill="#f0d4d2"/>
+    <rect x="300" y="174" width="150" height="6" rx="3" fill="#d92d20"/>
+
+    <rect x="654" y="74" width="358" height="120" rx="8" fill="#ffffff" stroke="#e1e6ef"/>
+    <text x="674" y="110" font-size="16" fill="#475467">Includes Fix Version</text>
+    <text x="674" y="158" font-size="40" fill="#1d2939" font-weight="700">31</text>
+    <rect x="674" y="174" width="318" height="6" rx="3" fill="#dfe6f0"/>
+    <rect x="674" y="174" width="300" height="6" rx="3" fill="#1d4ed8"/>
+
+    <rect x="1028" y="74" width="358" height="120" rx="8" fill="#ffffff" stroke="#e1e6ef"/>
+    <text x="1048" y="110" font-size="16" fill="#475467">Enriched by JFrog</text>
+    <text x="1048" y="158" font-size="40" fill="#1d2939" font-weight="700">12</text>
+    <rect x="1048" y="174" width="318" height="6" rx="3" fill="#d8efdb"/>
+    <rect x="1048" y="174" width="120" height="6" rx="3" fill="#40be46"/>
+
+    <rect x="1402" y="74" width="398" height="120" rx="8" fill="#ffffff" stroke="#e1e6ef"/>
+    <text x="1422" y="110" font-size="16" fill="#475467">Component With Most Vulnerabilities</text>
+    <text x="1422" y="158" font-size="40" fill="#1d2939" font-weight="700">27</text>
+    <text x="1492" y="156" font-size="18" fill="#475467">|  axios 1.7.2</text>
+    <rect x="1422" y="174" width="360" height="6" rx="3" fill="#d92d20"/>
+  </g>
+
+  <!-- table heading -->
+  <text x="282" y="248" font-family="Arial, sans-serif" font-size="24" fill="#1d2939" font-weight="700">32 Vulnerabilities</text>
+  <text x="510" y="248" font-family="Arial, sans-serif" font-size="15" fill="#98a2b3">Last Scan Status</text>
+
+  <!-- column headers -->
+  <g font-family="Arial, sans-serif" font-size="14" fill="#667085">
+    <text x="295" y="296">Severity</text>
+    <text x="392" y="296">CVSS</text>
+    <text x="470" y="296">ID</text>
+    <text x="735" y="296" fill="#16a36a" font-weight="700">Contextual Analysis</text>
+    <text x="952" y="296">JFrog Research</text>
+    <text x="1112" y="296">Component</text>
+    <text x="1300" y="296">Fix Version</text>
+    <text x="1520" y="296">CWE</text>
+  </g>
+  <line x1="282" y1="312" x2="1800" y2="312" stroke="#edf0f5"/>
+
+  <!-- red highlight box around Component column -->
+  <rect x="1100" y="318" width="150" height="350" rx="4" fill="none" stroke="#d92d20" stroke-width="2"/>
+
+  <!-- rows -->
+  <g font-family="Arial, sans-serif" font-size="16" fill="#344054">
+    <!-- row template: severity square, score, id, ctx badge, research, component, fix, cwe -->
+    <!-- row 1 -->
+    <rect x="296" y="338" width="16" height="16" rx="3" fill="#d92d20"/>
+    <text x="392" y="352">6.3 <tspan fill="#98a2b3" font-size="13">v4</tspan></text>
+    <text x="470" y="352" fill="#1d2939">CVE-2025-62718</text>
+    <rect x="735" y="336" width="120" height="24" rx="4" fill="#f2f4f7"/><text x="748" y="353" font-size="13" fill="#667085">Not Supported</text>
+    <text x="952" y="352" fill="#b7791f">▲ Medium</text>
+    <text x="1112" y="352" fill="#1d2939">axios:1.7.2</text>
+    <text x="1300" y="352" font-size="14">0.31.0, 1.15.0</text>
+    <text x="1520" y="352" font-size="14">CWE-918 (+1)</text>
+    <line x1="282" y1="372" x2="1800" y2="372" stroke="#f3f5f9"/>
+
+    <!-- row 2 -->
+    <rect x="296" y="390" width="16" height="16" rx="3" fill="#d92d20"/>
+    <text x="386" y="404" fill="#d92d20">10.0 <tspan fill="#98a2b3" font-size="13">v3</tspan></text>
+    <text x="470" y="404" fill="#1d2939">CVE-2026-42043</text>
+    <rect x="735" y="388" width="120" height="24" rx="4" fill="#f2f4f7"/><text x="748" y="405" font-size="13" fill="#667085">Not Supported</text>
+    <text x="952" y="404" fill="#3a7d44">▲ Low</text>
+    <text x="1112" y="404" fill="#1d2939">axios:1.7.2</text>
+    <text x="1300" y="404" font-size="14">0.31.1, 1.15.1</text>
+    <text x="1520" y="404" font-size="14">CWE-441 (+2)</text>
+    <line x1="282" y1="424" x2="1800" y2="424" stroke="#f3f5f9"/>
+
+    <!-- row 3 -->
+    <rect x="296" y="442" width="16" height="16" rx="3" fill="#d92d20"/>
+    <text x="392" y="456" fill="#d92d20">9.8 <tspan fill="#98a2b3" font-size="13">v3</tspan></text>
+    <text x="470" y="456" fill="#1d2939">CVE-2024-57965</text>
+    <rect x="735" y="440" width="120" height="24" rx="4" fill="#f2f4f7"/><text x="748" y="457" font-size="13" fill="#667085">Not Supported</text>
+    <text x="952" y="456" fill="#3a7d44">▲ Low</text>
+    <text x="1112" y="456" fill="#1d2939">axios:1.7.2</text>
+    <text x="1300" y="456" font-size="14">N/A</text>
+    <text x="1520" y="456" font-size="14">CWE-346</text>
+    <line x1="282" y1="476" x2="1800" y2="476" stroke="#f3f5f9"/>
+
+    <!-- row 4 -->
+    <rect x="296" y="494" width="16" height="16" rx="3" fill="#d92d20"/>
+    <text x="392" y="508" fill="#d92d20">9.1 <tspan fill="#98a2b3" font-size="13">v3</tspan></text>
+    <text x="470" y="508" fill="#1d2939">CVE-2026-42264</text>
+    <rect x="735" y="492" width="120" height="24" rx="4" fill="#f2f4f7"/><text x="748" y="509" font-size="13" fill="#667085">Not Supported</text>
+    <text x="1112" y="508" fill="#1d2939">axios:1.7.2</text>
+    <text x="1300" y="508" font-size="14">1.15.2</text>
+    <text x="1520" y="508" font-size="14">CWE-1321</text>
+    <line x1="282" y1="528" x2="1800" y2="528" stroke="#f3f5f9"/>
+
+    <!-- row 5 -->
+    <rect x="296" y="546" width="16" height="16" rx="3" fill="#d92d20"/>
+    <text x="392" y="560" fill="#d92d20">9.1 <tspan fill="#98a2b3" font-size="13">v3</tspan></text>
+    <text x="470" y="560" fill="#1d2939">CVE-2026-42044</text>
+    <rect x="735" y="544" width="120" height="24" rx="4" fill="#f2f4f7"/><text x="748" y="561" font-size="13" fill="#667085">Not Supported</text>
+    <text x="1112" y="560" fill="#1d2939">axios:1.7.2</text>
+    <text x="1300" y="560" font-size="14">1.15.1</text>
+    <text x="1520" y="560" font-size="14">CWE-915 (+1)</text>
+    <line x1="282" y1="580" x2="1800" y2="580" stroke="#f3f5f9"/>
+
+    <!-- row 6 (lodash) -->
+    <rect x="296" y="598" width="16" height="16" rx="3" fill="#d92d20"/>
+    <text x="392" y="612" fill="#d92d20">9.8 <tspan fill="#98a2b3" font-size="13">v3</tspan></text>
+    <text x="470" y="612" fill="#1d2939">CVE-2026-4800</text>
+    <rect x="735" y="596" width="120" height="24" rx="4" fill="#f2f4f7"/><text x="748" y="613" font-size="13" fill="#667085">Not Supported</text>
+    <text x="1112" y="612" fill="#667085">lodash:4....</text>
+    <text x="1300" y="612" font-size="14">4.18.0</text>
+    <text x="1520" y="612" font-size="14">CWE-94</text>
+    <line x1="282" y1="632" x2="1800" y2="632" stroke="#f3f5f9"/>
+
+    <!-- row 7 (High) -->
+    <circle cx="304" cy="656" r="9" fill="#e8833a"/><text x="300" y="661" font-size="12" fill="#ffffff" font-weight="700">H</text>
+    <text x="392" y="664" fill="#b7791f">7.5 <tspan fill="#98a2b3" font-size="13">v3</tspan></text>
+    <text x="470" y="664" fill="#1d2939">CVE-2024-39338</text>
+    <rect x="735" y="648" width="120" height="24" rx="4" fill="#f2f4f7"/><text x="748" y="665" font-size="13" fill="#667085">Not Supported</text>
+    <text x="952" y="664" fill="#c0392b">▲ High</text>
+    <text x="1112" y="664" fill="#1d2939">axios:1.7.2</text>
+    <text x="1300" y="664" font-size="14">1.7.4</text>
+    <text x="1520" y="664" font-size="14">CWE-918</text>
+  </g>
+</svg>

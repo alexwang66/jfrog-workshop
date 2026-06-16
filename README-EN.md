@@ -47,19 +47,15 @@ Official references:
 - Access Tokens: `https://docs.jfrog.com/administration/docs/access-tokens`
 - JFrog CLI Configuration: `https://docs.jfrog.com/integrations/docs/configuring-the-cli`
 
-In the JFrog Platform UI:
-1. Open your JFrog Platform URL, for example `https://<your-jfrog-domain>`.
-2. Go to Administration -> Security -> Access Tokens.
-3. Click Generate Token and create an Access Token for the current user.
-4. Copy and store the token securely. It will be used by JFrog CLI.
+Generate an Access Token in the JFrog Platform UI:
 
-Access Token page URL format:
+1. Open the Access Token page: `https://<your-jfrog-domain>/ui/admin/configuration/security/access_tokens`
+2. Click **Generate Token**.
+3. In the dialog, **just click Generate** — no extra configuration is needed.
+4. Copy and store the generated token securely.
+5. Put the token into the `JFROG_ACCESS_TOKEN` environment variable in your terminal below, for use by JFrog CLI.
 
-```text
-https://<your-jfrog-domain>/ui/admin/configuration/security/access_tokens
-```
-
-`<your-jfrog-domain>` is your JFrog Platform domain, for example `company.jfrog.io`.
+> `<your-jfrog-domain>` is your JFrog Platform domain (for example `company.jfrog.io`, as provided by the instructor).
 
 Configure JFrog CLI with one command. The Server ID is fixed as `Artifactory`.
 
@@ -84,6 +80,7 @@ jf c add Artifactory --url="$JFROG_URL" --access-token="$JFROG_ACCESS_TOKEN" --i
 Verify the configuration:
 
 ```bash
+jf c use Artifactory
 jf c show
 jf rt ping
 ```
@@ -106,15 +103,15 @@ cd jfrog-workshop
 
 Run the repository creation script from the automation directory.
 
-Each student should use their English name as `STUDENT_ID`. This value becomes the repository prefix and prevents students from overwriting each other in a shared lab.
+Each student should use their own user id (login account) as `STUDENT_ID`. This value becomes the repository prefix and prevents students from overwriting each other in a shared lab.
 
-Example: if your English name is Alex, set `STUDENT_ID` to `alex`, then run the creation script below.
+Example: if your user id is `labuser-t4-s3`, set `STUDENT_ID` to `labuser-t4-s3`, then run the creation script below.
 
 Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/automation
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 .\create-repo.ps1 -StudentId $env:STUDENT_ID
 ```
 
@@ -129,7 +126,7 @@ macOS / Linux:
 
 ```bash
 cd ~/jfrog-workshop/automation
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 chmod +x ./create-repo.sh
 ./create-repo.sh "$STUDENT_ID" all
 ```
@@ -147,7 +144,7 @@ Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/automation
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 .\delete-repo.ps1 -StudentId $env:STUDENT_ID
 ```
 
@@ -155,7 +152,7 @@ macOS / Linux:
 
 ```bash
 cd ~/jfrog-workshop/automation
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 ./delete-repo.sh "$STUDENT_ID" all
 ```
 
@@ -163,13 +160,15 @@ export STUDENT_ID="alex"
 
 ## 4. NPM Build, Publish, And Build-Info
 
+This workshop **treats `axios@1.7.2` as a simulated malicious package version**. The goal is to make `npm install` fail when it tries to resolve that version through JFrog Curation.
+
 Enter the sample project directory.
 
 Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 Get-Content .\package.json
 ```
 
@@ -177,7 +176,7 @@ macOS / Linux:
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 cat ./package.json
 ```
 
@@ -263,8 +262,6 @@ Verify in the UI:
 ---
 
 ## 5. Curation Demo: Block `axios@1.7.2`
-
-This workshop **treats `axios@1.7.2` as a simulated malicious package version**. The goal is to make `npm install` fail when it tries to resolve that version through JFrog Curation.
 
 ### 5.1 Enable Curation For The Remote Repository
 
@@ -394,7 +391,7 @@ Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
@@ -412,7 +409,7 @@ macOS / Linux:
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
@@ -430,6 +427,12 @@ Expected result:
 - CLI output shows that a package version was blocked, specifically `axios@1.7.2`.
 - Installation fails or is replaced by an allowed version, depending on the policy action and configuration.
 - If install succeeds, build-info is available at Builds -> `<student-id>-npm-sample` -> `#2`.
+
+You can also scan build #2 in Xray (Xray -> Scans List -> `<student-id>-npm-sample` -> `2`). It shows that pulling in the simulated-malicious `axios 1.7.2` brings a large number of vulnerabilities into the project:
+
+![Xray scan: axios 1.7.2 vulnerabilities](./workshop/images/current-xray-axios-172.svg)
+
+> The scan above shows build #2 has **32 vulnerabilities**, and the **component with the most vulnerabilities is `axios 1.7.2`** (this Lab's simulated-malicious version) — exactly why Curation is used to block it at download time.
 
 Example blocked CLI output:
 
@@ -480,7 +483,7 @@ Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 
 notepad .\package.json
 Get-Content .\package.json
@@ -490,7 +493,7 @@ macOS / Linux:
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 
 nano package.json
 cat package.json
@@ -513,7 +516,7 @@ Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "alex"
+$env:STUDENT_ID = "labuser-t4-s3"
 
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
@@ -532,7 +535,7 @@ macOS / Linux:
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="alex"
+export STUDENT_ID="labuser-t4-s3"
 
 rm -rf node_modules package-lock.json
 npm cache clean --force
