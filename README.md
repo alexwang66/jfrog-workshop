@@ -2,9 +2,20 @@
 
 目標：在客戶本機完成一次 **npm 建置 + 發布 build-info**，並示範 **JFrog Curation 阻擋模擬惡意版本 `axios@1.7.2` 的下載**。
 
+## 本工作坊流程
+
+0. **前置需求** — 安裝並驗證 `jf`、`git`、`node`、`npm`
+1. **登入 JFrog** — 產生 Access Token、設定 JFrog CLI
+2. **複製工作坊 Repository** — 把範例專案 clone 到本機
+3. **建立工作坊 Repository** — 用腳本建立你專屬的一組 npm 倉庫
+4. **NPM 建置、發布與 Build-Info** — 首次建置並推送 build-info（`#1`）
+5. **Curation 示範** — 引入模擬惡意版本 `axios@1.7.2`、用 Curation 阻擋、再換回安全版本
+
 ---
 
 ## 0. 前置需求
+
+開始動手前，先確認本機已裝好並能執行以下工具。
 
 - 本機需安裝：
   - VS Code 或 Cursor（建議，用於開啟專案與執行內建終端機）
@@ -35,11 +46,13 @@ node -v
 npm -v
 ```
 
+> ✅ 檢查點：四條 `--version` 指令都能印出版本號，代表工具已就緒。
+
 ---
 
 ## 1. 登入 JFrog
 
-先登入你的 JFrog Platform 實例並產生 Access Token。
+工具就緒後，接著讓 JFrog CLI 連上你的 JFrog Platform 實例：先在 UI 產生 Access Token，再用它設定 CLI。
 
 在 JFrog Platform UI 中產生 Access Token：
 
@@ -83,9 +96,13 @@ jf rt ping
 
 後續所有命令都使用 Server ID `Artifactory`。如果看到 `Server ID 'Artifactory' does not exist`，代表 CLI 設定沒有成功建立，請重新執行 `jf c add Artifactory ...`。
 
+> ✅ 檢查點：`jf rt ping` 回傳 `OK`，且 `jf c show` 能看到 `Artifactory` 這個 server。
+
 ---
 
 ## 2. 複製工作坊 Repository
+
+CLI 連上平台後，把工作坊範例專案 clone 到本機。
 
 ```bash
 cd ~
@@ -93,11 +110,13 @@ git clone https://github.com/alexwang66/jfrog-workshop.git
 cd jfrog-workshop
 ```
 
+> ✅ 檢查點：`~/jfrog-workshop` 目錄已存在，裡面有 `npm-sample/` 與 `automation/`。
+
 ---
 
 ## 3. 建立工作坊 Repository
 
-在 `automation` 目錄執行建立 repository 的腳本。
+專案 clone 完成後，用 `automation` 目錄的腳本，在 Artifactory 建立你專屬的一組 npm 倉庫。
 
 每位學員請使用**自己的 user id**（登入帳號）作為 `STUDENT_ID`，這個值會作為 repository 前綴，避免多人共用 lab 時互相覆蓋。
 
@@ -132,18 +151,19 @@ chmod +x ./create-repo.sh
 - Resolve repository：`<student-id>-npm-virtual`（virtual）
 - Remote repository：`<student-id>-npm-remote`（remote，指向 npmjs）
 - Deploy repository：`<student-id>-npm-dev-local`（local）
-- Prod repository：`<student-id>-npm-prod-local`（local）
 
 在 Artifactory 中開啟：`https://<your-jfrog-domain>/ui/admin/repositories`，查看剛建立的倉庫。
 選擇「All Repositories」，在右側搜尋欄輸入你的 student-id 進行搜尋。
 
 ![建立的倉庫列表](./workshop/images/repos-created.png)
 
-
+> ✅ 檢查點：在 All Repositories 中能搜到 3 個以你的 student-id 為前綴的倉庫（`-npm-virtual` / `-npm-remote` / `-npm-dev-local`）。
 
 ---
 
 ## 4. NPM 建置、發布與 Build-Info
+
+倉庫就緒後，在本機完成第一次 npm 建置（使用安全版本 `axios@1.16.1`），並把 build-info 推送到 Artifactory。
 
 本工作坊 **將 `axios@1.7.2` 視為模擬惡意套件版本**。目標是讓 `npm install` 透過 JFrog Curation 解析到該版本時被阻擋。
 
@@ -247,9 +267,13 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 ![Build #1 build-info](./workshop/images/build-info-1.png)
 
+> ✅ 檢查點：Builds 中出現 `#1`，build-info 的 dependencies 含 `axios@1.16.1`。
+
 ---
 
 ## 5. Curation 示範：阻擋 `axios@1.7.2`
+
+首次 build-info 完成後，進入本工作坊的重點：把專案依賴換成模擬惡意版本 `axios@1.7.2`，用 Curation 在下載源頭把它擋下，最後再換回安全版本重新建置。
 
 ### 5.1 啟用 Remote Repository 的 Curation
 
@@ -352,7 +376,8 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 示例：
 
-![Create Curation Policy](./workshop/images/current-curation-policy.svg)
+![建立 Curation Policy 並套用到 npm-remote](./workshop/images/curation-policy-create.png)
+
 
 ### 5.4 從 Artifactory Remote Cache 刪除已快取的 `axios`
 
@@ -368,7 +393,7 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 示例：
 
-![Delete Axios From Remote Cache](./workshop/images/current-remote-cache-delete.svg)
+![從 Remote Cache 刪除 axios](./workshop/images/remote-cache-delete-axios.png)
 
 ### 5.5 重新執行 Install 並觀察阻擋
 
@@ -538,9 +563,12 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 - Artifactory -> Builds -> `<student-id>-npm-sample` -> `#3`
 - Build-info 中的 dependencies 應顯示已使用 `axios@1.16.1`。
 
+> ✅ 檢查點：`#2` 已觸發 Curation 阻擋（或在 Xray 看到 `axios 1.7.2` 的漏洞），`#3` 已改用 `axios@1.16.1` 並建置成功，Curation 流程完成。
 
---------
-附录：
+---
+
+## 附錄：清理倉庫
+
 如需清理某位學員的 repository，使用相同的 `STUDENT_ID` 執行刪除腳本：
 
 🪟 Windows PowerShell：

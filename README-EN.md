@@ -2,9 +2,20 @@
 
 Goal: Complete an **npm build + build-info publication** on a customer machine, and demonstrate how **JFrog Curation blocks the download of a simulated malicious version, `axios@1.7.2`**.
 
+## Workshop Flow
+
+0. **Prerequisites** — install and verify `jf`, `git`, `node`, `npm`
+1. **Log In To JFrog** — generate an Access Token, configure the JFrog CLI
+2. **Clone The Workshop Repository** — clone the sample project to your machine
+3. **Create The Workshop Repositories** — create your own set of npm repositories with the script
+4. **NPM Build, Publish, And Build-Info** — first build and push build-info (`#1`)
+5. **Curation Demo** — introduce the simulated-malicious `axios@1.7.2`, block it with Curation, then switch back to a safe version
+
 ---
 
 ## 0. Prerequisites
+
+Before you start, make sure the following tools are installed and runnable on your machine.
 
 - JFrog Cloud trial account: `https://jfrog.com/start-free/`
 - Required local tools:
@@ -37,11 +48,13 @@ node -v
 npm -v
 ```
 
+> ✅ Checkpoint: all four `--version` commands print a version, so the tools are ready.
+
 ---
 
 ## 1. Log In To JFrog
 
-Log in to your JFrog Platform instance and generate an Access Token first.
+With the tools ready, connect the JFrog CLI to your JFrog Platform instance: generate an Access Token in the UI, then use it to configure the CLI.
 
 Official references:
 - Access Tokens: `https://docs.jfrog.com/administration/docs/access-tokens`
@@ -87,9 +100,13 @@ jf rt ping
 
 All later commands use the Server ID `Artifactory`. If you see `Server ID 'Artifactory' does not exist`, the CLI configuration was not created successfully. Run the `jf c add Artifactory ...` command again.
 
+> ✅ Checkpoint: `jf rt ping` returns `OK`, and `jf c show` lists the `Artifactory` server.
+
 ---
 
 ## 2. Clone The Workshop Repository
+
+With the CLI connected, clone the workshop sample project to your machine.
 
 ```bash
 cd ~
@@ -97,11 +114,13 @@ git clone https://github.com/alexwang66/jfrog-workshop.git
 cd jfrog-workshop
 ```
 
+> ✅ Checkpoint: the `~/jfrog-workshop` directory exists and contains `npm-sample/` and `automation/`.
+
 ---
 
 ## 3. Create The Workshop Repositories
 
-Run the repository creation script from the automation directory.
+With the project cloned, use the script in the `automation` directory to create your own set of npm repositories in Artifactory.
 
 Each student should use their own user id (login account) as `STUDENT_ID`. This value becomes the repository prefix and prevents students from overwriting each other in a shared lab.
 
@@ -135,33 +154,18 @@ The scripts create these npm repositories:
 - Resolve repository: `<student-id>-npm-virtual` (virtual)
 - Remote repository: `<student-id>-npm-remote` (remote, pointing to npmjs)
 - Deploy repository: `<student-id>-npm-dev-local` (local)
-- Prod repository: `<student-id>-npm-prod-local` (local)
 
 In Artifactory, open `https://<your-jfrog-domain>/ui/admin/repositories` to view the repositories you just created. Select **All Repositories** and search for your student-id in the search box on the right.
 
 ![Created repositories](./workshop/images/repos-created.png)
 
-To clean up one student’s repositories, run the delete script with the same `STUDENT_ID`:
-
-🪟 Windows PowerShell:
-
-```powershell
-cd ~/jfrog-workshop/automation
-$env:STUDENT_ID = "labuser-t4-s3"
-.\delete-repo.ps1 -StudentId $env:STUDENT_ID
-```
-
-🐧 macOS / Linux:
-
-```bash
-cd ~/jfrog-workshop/automation
-export STUDENT_ID="labuser-t4-s3"
-./delete-repo.sh "$STUDENT_ID" all
-```
+> ✅ Checkpoint: in All Repositories you can find 3 repos prefixed with your student-id (`-npm-virtual` / `-npm-remote` / `-npm-dev-local`).
 
 ---
 
 ## 4. NPM Build, Publish, And Build-Info
+
+With the repositories ready, complete the first npm build on your machine (using the safe version `axios@1.16.1`) and push the build-info to Artifactory.
 
 This workshop **treats `axios@1.7.2` as a simulated malicious package version**. The goal is to make `npm install` fail when it tries to resolve that version through JFrog Curation.
 
@@ -264,9 +268,13 @@ Verify in the UI:
 
 ![Build #1 build-info](./workshop/images/build-info-1.png)
 
+> ✅ Checkpoint: `#1` appears under Builds, and the build-info dependencies include `axios@1.16.1`.
+
 ---
 
 ## 5. Curation Demo: Block `axios@1.7.2`
+
+With the first build-info in place, here is the core of the workshop: switch the project dependency to the simulated-malicious `axios@1.7.2`, use Curation to block it at the download source, then switch back to a safe version and rebuild.
 
 ### 5.1 Enable Curation For The Remote Repository
 
@@ -368,7 +376,7 @@ In the JFrog UI:
 
 Example:
 
-![Create Curation Policy](./workshop/images/current-curation-policy.svg)
+![Create Curation Policy](./workshop/images/curation-policy-create.png)
 
 ### 5.4 Delete The Cached `axios` Package From Artifactory Remote Cache
 
@@ -387,7 +395,7 @@ In the JFrog UI:
 
 Example:
 
-![Delete Axios From Remote Cache](./workshop/images/current-remote-cache-delete.svg)
+![Delete Axios From Remote Cache](./workshop/images/remote-cache-delete-axios.png)
 
 ### 5.5 Re-run Install And Observe The Block
 
@@ -557,3 +565,27 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 Verify in the UI:
 - Artifactory -> Builds -> `<student-id>-npm-sample` -> `#3`
 - The build-info dependencies should show `axios@1.16.1`.
+
+> ✅ Checkpoint: `#2` triggered the Curation block (or shows `axios 1.7.2` vulnerabilities in Xray), and `#3` rebuilt successfully using `axios@1.16.1`. The Curation flow is complete.
+
+---
+
+## Appendix: Clean Up Repositories
+
+To clean up one student's repositories, run the delete script with the same `STUDENT_ID`:
+
+🪟 Windows PowerShell:
+
+```powershell
+cd ~/jfrog-workshop/automation
+$env:STUDENT_ID = "labuser-t4-s3"
+.\delete-repo.ps1 -StudentId $env:STUDENT_ID
+```
+
+🐧 macOS / Linux:
+
+```bash
+cd ~/jfrog-workshop/automation
+export STUDENT_ID="labuser-t4-s3"
+./delete-repo.sh "$STUDENT_ID" all
+```

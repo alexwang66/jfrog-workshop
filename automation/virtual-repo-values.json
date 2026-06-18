@@ -6,6 +6,6 @@
     "repoLayoutRef": "npm-default",
     "defaultDeploymentRepo": "npm-dev-local",
     "externalDependenciesRemoteRepo": "npm-remote",
-    "repositories": "npm-dev-local,npm-prod-local,npm-remote"
+    "repositories": "npm-dev-local,npm-remote"
   }
 ]
