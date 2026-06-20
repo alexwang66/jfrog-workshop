@@ -72,7 +72,7 @@ Generate an Access Token in the JFrog Platform UI:
 
 Configure JFrog CLI with one command. The Server ID is fixed as `Artifactory`.
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 $env:JFROG_URL = "https://<your-jfrog-domain>"
@@ -126,7 +126,7 @@ Each student should use their own user id (login account) as `STUDENT_ID`. This 
 
 Example: if your user id is `labuser-t4-s3`, set `STUDENT_ID` to `labuser-t4-s3`, then run the creation script below.
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/automation
@@ -171,7 +171,7 @@ This workshop **treats `axios@1.7.2` as a simulated malicious package version**.
 
 Enter the sample project directory.
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -191,7 +191,7 @@ All `npm` and `jf npm ...` commands must be executed from the `npm-sample` direc
 
 Configure npm resolution and deployment:
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 jf npm-config `
@@ -215,7 +215,7 @@ jf npm-config \
 
 Clean the local install output, `package-lock.json`, and npm cache so dependencies are resolved through JFrog Artifactory again.
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
@@ -235,7 +235,7 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 Install, publish, and publish build-info:
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 $env:BUILD_NAME = "$($env:STUDENT_ID)-npm-sample"
@@ -283,6 +283,8 @@ First, confirm that Curation is enabled for the student’s own remote repositor
 - Go to Administration -> Curation -> Remote Repositories, or a similar page depending on your UI version.
 - Find `<student-id>-npm-remote` and ensure Curation is enabled.
 
+![Remote repository with Curation enabled](./workshop/images/curation-remote-enabled.png)
+
 - Create a Curation Policy to block axios@1.7.2
 - Configure the Condition
 
@@ -292,7 +294,7 @@ First, confirm that Curation is enabled for the student’s own remote repositor
 
 To trigger the Curation block, directly edit `~/jfrog-workshop/npm-sample/package.json` and switch the sample project to the simulated risky package version used in this lab.
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -320,7 +322,7 @@ Confirm that `package.json` contains this content:
 
 Then clean the project before reinstalling. `package-lock.json` must be deleted; otherwise npm may decide the dependency tree is already satisfied and the Curation block may not be observable.
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -369,10 +371,12 @@ In the JFrog UI:
 - Go to Administration -> Curation -> **Policies Management**.
 - Create a policy:
   - Policy name: `<student-id>-npm-curation-policy`
-  - Scope: **Specific remote repositories** and select `<student-id>-npm-remote`.
+  - Scope: **Specific remote repositories**, and **be sure to select YOUR OWN** remote repo `<student-id>-npm-remote`.
   - Condition: select the custom condition for `axios 1.7.2`.
   - Action: **Block**.
-- Save the policy.
+- Click the **Save Policy** button (bottom-right) to save. After saving, confirm the policy status is **Enabled** — otherwise it has no effect.
+
+> ⚠️ **Important: the Scope must be your own `<student-id>-npm-remote`.** If you pick the wrong repo (or none), the policy's effective scope is empty, `axios@1.7.2` is not blocked, and the block demo in 5.5 will not work.
 
 Example:
 
@@ -399,7 +403,7 @@ Example:
 
 ### 5.5 Re-run Install And Observe The Block
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -491,7 +495,7 @@ Example:
 
 Then directly edit `package.json` to remediate the project to the approved version and update the package version.
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -524,7 +528,7 @@ Confirm that `package.json` contains at least this content:
 
 Clean the local npm state, rebuild, and publish build-info.
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -574,7 +578,7 @@ Verify in the UI:
 
 To clean up one student's repositories, run the delete script with the same `STUDENT_ID`:
 
-🪟 Windows PowerShell:
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
 cd ~/jfrog-workshop/automation

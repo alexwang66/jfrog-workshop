@@ -66,7 +66,7 @@ npm -v
 
 使用一條命令設定 JFrog CLI。Server ID 固定為 `Artifactory`。
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 $env:JFROG_URL = "https://<your-jfrog-domain>"
@@ -122,7 +122,7 @@ cd jfrog-workshop
 
 範例：如果你的 user id 是 `labuser-t4-s3`，請將 `STUDENT_ID` 設為 `labuser-t4-s3`，然後執行下面的建立腳本。
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/automation
@@ -169,7 +169,7 @@ chmod +x ./create-repo.sh
 
 進入範例專案目錄。
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -189,7 +189,7 @@ cat ./package.json
 
 設定 npm 解析與部署：
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 jf npm-config `
@@ -213,7 +213,7 @@ jf npm-config \
 
 清理本機安裝結果、`package-lock.json` 與 npm 快取，確保依賴重新透過 JFrog Artifactory 解析。
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
@@ -233,7 +233,7 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 安裝、發布套件並發布 build-info：
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 $env:BUILD_NAME = "$($env:STUDENT_ID)-npm-sample"
@@ -282,7 +282,10 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 - 進入 Administration -> Curation -> Remote Repositories，或依你的 UI 版本進入類似頁面。
 - 找到 `<student-id>-npm-remote`，確認 Curation 已啟用。
 
+![確認 Remote Repository 已啟用 Curation](./workshop/images/curation-remote-enabled.png)
+
 - 建立 Curation Policy 來阻斷 axios@1.7.2
+  
 - 設定 Condition
 
 ![設定 Curation Condition](./workshop/images/curation-condition-config.png)
@@ -291,7 +294,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 為了觸發 Curation 阻擋，先直接修改 `~/jfrog-workshop/npm-sample/package.json`，將範例專案的 `axios` 依賴切換到本 Lab 指定的模擬風險版本。
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -318,7 +321,7 @@ cat package.json
 
 接著在重新安裝前清理專案。必須刪除 `package-lock.json`；否則 npm 可能判斷依賴樹已滿足，導致 Curation 阻擋效果不易觀察。
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -369,10 +372,12 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 - 進入 Administration -> Curation -> **Policies Management**。
 - 建立 policy：
   - Policy name：`<student-id>-npm-curation-policy`
-  - Scope：選擇 **Specific remote repositories**，並選取 `<student-id>-npm-remote`。
+  - Scope：選擇 **Specific remote repositories**，並**務必勾選「你自己的」** remote 倉庫 `<student-id>-npm-remote`。
   - Condition：選擇剛建立的 `axios 1.7.2` custom condition。
   - Action：**Block**。
-- 儲存 policy。
+- 點擊右下角的 **Save Policy** 按鈕儲存。儲存後確認 policy 狀態為 **Enabled**（啟用），否則不會生效。
+
+> ⚠️ **重要：Scope 一定要選你自己的 `<student-id>-npm-remote`。** 若選錯倉庫或未勾選，policy 的作用域會是空的，`axios@1.7.2` 不會被攔截，5.5 的阻擋示範也就不會生效。
 
 示例：
 
@@ -397,7 +402,7 @@ test ! -f ./package-lock.json && echo "package-lock.json removed"
 
 ### 5.5 重新執行 Install 並觀察阻擋
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -488,7 +493,7 @@ Curation audit event 示例：
 
 接著直接修改 `package.json`，將專案修復到允許版本並更新應用版本號。
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -520,7 +525,7 @@ cat package.json
 
 清理本機 npm 狀態後重新構建並上傳 build-info。
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
@@ -571,7 +576,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 如需清理某位學員的 repository，使用相同的 `STUDENT_ID` 執行刪除腳本：
 
-🪟 Windows PowerShell：
+<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
 cd ~/jfrog-workshop/automation
