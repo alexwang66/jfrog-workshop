@@ -281,14 +281,20 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 - 進入 Administration -> Curation -> Remote Repositories，或依你的 UI 版本進入類似頁面。
 - 找到 `<student-id>-npm-remote`，確認 Curation 已啟用。
-
+- 创建 Curation Policy 來阻斷 axios@1.7.2
+- Step 1
+![alt text](image.png)
+- Step 2
 ![確認 Remote Repository 已啟用 Curation](./workshop/images/curation-remote-enabled.png)
 
-- 建立 Curation Policy 來阻斷 axios@1.7.2
-  
-- 設定 Condition
+- Step 3, 新建 Condition
+![alt text](image-1.png)
 
 ![設定 Curation Condition](./workshop/images/curation-condition-config.png)
+
+- Step 4, Click Next
+- Step 5, Select Block and Save Policy
+  ![alt text](image-2.png)
 
 ### 5.2 將範例專案切換到被阻擋版本
 
