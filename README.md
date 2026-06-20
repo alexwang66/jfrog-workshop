@@ -275,26 +275,20 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 首次 build-info 完成後，進入本工作坊的重點：建立 Curation Policy 和 Condition，用 Curation 在下載源頭把 `axios@1.7.2` 擋下，最後再換回安全版本重新建置。
 
-### 5.1 啟用 Remote Repository 的 Curation
-
-先確認學員自己的 remote repository 已啟用 Curation，後續 policy 才能對下載請求生效。
-
-- 進入 Administration -> Curation -> Remote Repositories，或依你的 UI 版本進入類似頁面。
-- 找到 `<student-id>-npm-remote`，確認 Curation 已啟用。
-- 创建 Curation Policy 來阻斷 axios@1.7.2
+### 5.1  建立 Curation Policy 來阻斷 axios@1.7.2
 - Step 1
-![alt text](image.png)
+![建立 Curation Policy（步驟一）](./workshop/images/curation-policy-step1.png)
 - Step 2
 ![確認 Remote Repository 已啟用 Curation](./workshop/images/curation-remote-enabled.png)
 
 - Step 3, 新建 Condition
-![alt text](image-1.png)
+![新建 Curation Condition](./workshop/images/curation-condition-new.png)
 
 ![設定 Curation Condition](./workshop/images/curation-condition-config.png)
 
 - Step 4, Click Next
 - Step 5, Select Block and Save Policy
-  ![alt text](image-2.png)
+  ![選擇 Block 並 Save Policy](./workshop/images/curation-policy-save.png)
 
 ### 5.2 將範例專案切換到被阻擋版本
 
