@@ -165,7 +165,7 @@ In Artifactory, open `https://<your-jfrog-domain>/ui/admin/repositories` to view
 
 ## 4. NPM Build, Publish, And Build-Info
 
-With the repositories ready, complete the first npm build on your machine (using the safe version `axios@1.16.1`) and push the build-info to Artifactory.
+With the repositories ready, complete the first npm build on your machine and push the build-info to Artifactory.
 
 This workshop **treats `axios@1.7.2` as a simulated malicious package version**. The goal is to make `npm install` fail when it tries to resolve that version through JFrog Curation.
 
@@ -213,24 +213,31 @@ jf npm-config \
   --global=false
 ```
 
-Clean the local install output, `package-lock.json`, and npm cache so dependencies are resolved through JFrog Artifactory again.
+- Check that `axios` in package.json is version `1.7.2`.
 
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
-Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
-npm cache clean --force
-Test-Path .\package-lock.json
+cd ~/jfrog-workshop/npm-sample
+notepad .\package.json
+Get-Content .\package.json
 ```
-
-`Test-Path .\package-lock.json` should return `False`, which means the lock file has been removed.
 
 🐧 macOS / Linux:
 
 ```bash
-rm -rf node_modules package-lock.json
-npm cache clean --force
-test ! -f ./package-lock.json && echo "package-lock.json removed"
+cd ~/jfrog-workshop/npm-sample
+cat package.json
+```
+
+Confirm that `package.json` contains the following:
+
+```json
+{
+  "dependencies": {
+    "axios": "1.7.2"
+  }
+}
 ```
 
 Install, publish, and publish build-info:
@@ -268,7 +275,7 @@ Verify in the UI:
 
 ![Build #1 build-info](./workshop/images/build-info-1.png)
 
-> ✅ Checkpoint: `#1` appears under Builds, and the build-info dependencies include `axios@1.16.1`.
+> ✅ Checkpoint: `#1` appears under Builds, and the build-info dependencies include `axios@1.7.2`.
 
 ---
 
@@ -291,99 +298,7 @@ With the first build-info in place, here is the core of the workshop: create a C
 - Step 5, Select Block and Save Policy
   ![Select Block and Save Policy](./workshop/images/curation-policy-save.png)
 
-### 5.2 Switch The Sample Project To The Blocked Version
-
-To trigger the Curation block, directly edit `~/jfrog-workshop/npm-sample/package.json` and switch the sample project to the simulated risky package version used in this lab.
-
-<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
-
-```powershell
-cd ~/jfrog-workshop/npm-sample
-notepad .\package.json
-Get-Content .\package.json
-```
-
-🐧 macOS / Linux:
-
-```bash
-cd ~/jfrog-workshop/npm-sample
-nano package.json
-cat package.json
-```
-
-Confirm that `package.json` contains this content:
-
-```json
-{
-  "dependencies": {
-    "axios": "1.7.2"
-  }
-}
-```
-
-Then clean the project before reinstalling. `package-lock.json` must be deleted; otherwise npm may decide the dependency tree is already satisfied and the Curation block may not be observable.
-
-<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
-
-```powershell
-cd ~/jfrog-workshop/npm-sample
-Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
-npm cache clean --force
-Test-Path .\package-lock.json
-```
-
-`Test-Path .\package-lock.json` should return `False`.
-
-🐧 macOS / Linux:
-
-```bash
-cd ~/jfrog-workshop/npm-sample
-rm -rf node_modules package-lock.json
-npm cache clean --force
-test ! -f ./package-lock.json && echo "package-lock.json removed"
-```
-
-### 5.3 Create A Curation Policy In The JFrog UI
-
-Create a Custom Condition first, then use it in a Curation Policy.
-
-#### 5.3.1 Create A Custom Condition
-
-Official reference: `https://docs.jfrog.com/security/docs/create-custom-conditions`
-
-In the JFrog UI:
-- Go to Administration -> Curation Settings -> **Conditions**.
-- Click **Create Condition**.
-- Select the **Block Specific Package Versions** template.
-- Configure:
-  - Condition name: `<student-id>-axios-1.7.2`
-  - Package type: `npm`
-  - Package: `axios`
-  - Version: `1.7.2`
-- Save the condition.
-
-Example:
-
-![Create Curation Condition](./workshop/images/current-curation-condition.svg)
-
-#### 5.3.2 Create A Policy And Apply It To The NPM Remote Repository
-
-In the JFrog UI:
-- Go to Administration -> Curation -> **Policies Management**.
-- Create a policy:
-  - Policy name: `<student-id>-npm-curation-policy`
-  - Scope: **Specific remote repositories**, and **be sure to select YOUR OWN** remote repo `<student-id>-npm-remote`.
-  - Condition: select the custom condition for `axios 1.7.2`.
-  - Action: **Block**.
-- Click the **Save Policy** button (bottom-right) to save. After saving, confirm the policy status is **Enabled** — otherwise it has no effect.
-
-> ⚠️ **Important: the Scope must be your own `<student-id>-npm-remote`.** If you pick the wrong repo (or none), the policy's effective scope is empty, `axios@1.7.2` is not blocked, and the block demo in 5.5 will not work.
-
-Example:
-
-![Create Curation Policy](./workshop/images/curation-policy-create.png)
-
-### 5.4 Delete The Cached `axios` Package From Artifactory Remote Cache
+### 5.2 Delete The Cached `axios` Package From Artifactory Remote Cache
 
 If `axios@1.7.2` was downloaded before the Curation policy was created, Artifactory may have cached it in the remote cache repository. Delete the cached package before retrying the npm install.
 
@@ -402,7 +317,7 @@ Example:
 
 ![Delete Axios From Remote Cache](./workshop/images/remote-cache-delete-axios.png)
 
-### 5.5 Re-run Install And Observe The Block
+### 5.3 Re-run Install And Observe The Block
 
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
@@ -416,10 +331,6 @@ $env:BUILD_NAME = "$($env:STUDENT_ID)-npm-sample"
 $env:BUILD_NUMBER = "2"
 
 jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
-jf npm publish --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
-jf rt build-add-git $env:BUILD_NAME $env:BUILD_NUMBER
-jf rt build-collect-env $env:BUILD_NAME $env:BUILD_NUMBER
-jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
 ```
 
 🐧 macOS / Linux:
@@ -434,22 +345,11 @@ BUILD_NAME="${STUDENT_ID}-npm-sample"
 BUILD_NUMBER=2
 
 jf npm install --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
-jf npm publish --build-name="$BUILD_NAME" --build-number="$BUILD_NUMBER"
-jf rt build-add-git "$BUILD_NAME" "$BUILD_NUMBER"
-jf rt build-collect-env "$BUILD_NAME" "$BUILD_NUMBER"
-jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 ```
 
 Expected result:
 - CLI output shows that a package version was blocked, specifically `axios@1.7.2`.
 - Installation fails or is replaced by an allowed version, depending on the policy action and configuration.
-- If install succeeds, build-info is available at Builds -> `<student-id>-npm-sample` -> `#2`.
-
-You can also scan build #2 in Xray (Xray -> Scans List -> `<student-id>-npm-sample` -> `2`). It shows that pulling in the simulated-malicious `axios 1.7.2` brings a large number of vulnerabilities into the project:
-
-![Xray scan: axios 1.7.2 vulnerabilities](./workshop/images/current-xray-axios-172.svg)
-
-> The scan above shows build #2 has **32 vulnerabilities**, and the **component with the most vulnerabilities is `axios 1.7.2`** (this Lab's simulated-malicious version) — exactly why Curation is used to block it at download time.
 
 Example blocked CLI output:
 
@@ -476,7 +376,7 @@ Curation audit event example:
 
 ![Curation Audit Blocked](./workshop/images/current-curation-audit.svg)
 
-### 5.6 Find An Approved Version In Catalog And Rebuild
+### 5.4 Find An Approved Version In Catalog And Rebuild
 
 After confirming the block, go back to JFrog Catalog, find the latest `axios` version, and verify that it is allowed for download.
 
