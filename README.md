@@ -289,6 +289,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 - Step 3, 新建 Condition
   **Conditions**。
 - 點擊 **Create Condition**。
+  ![新建 Curation Condition](./workshop/images/curation-condition-new.png)
 - 選擇 **Block Specific Package Versions** 範本。
 - 設定：
   - Condition name：`block-axios-1.7.2`
@@ -296,7 +297,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
   - Package：`axios`
   - Version：`1.7.2`
 - 儲存 condition。
-![新建 Curation Condition](./workshop/images/curation-condition-new.png)
+
 
 ![設定 Curation Condition](./workshop/images/curation-condition-config.png)
 
