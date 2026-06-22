@@ -256,6 +256,7 @@ jf npm-config \
   --global=false
 ```
 - 查看 package.json里的"axios"的版本"1.7.2"
+
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
@@ -327,7 +328,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 ### 5.1  建立 Curation Policy 來阻斷 axios@1.7.2
 
-> ⚠️ 多人共用同一個平台時，Policy 與 Condition 的名稱皆不可重複。請在 Policy 名稱與 Condition 名稱都帶上你自己的 student-id（例如 `block-axios-1.7.2-<student-id>`）。
+> ⚠️ 多人共用同一個平台時，Policy 與 Condition 的名稱皆不可重複。請在 Policy 名稱與 Condition 名稱都帶上你自己的 student-id（例如 `block-axios-172-<student-id>`）。
 
 - Step 1， Platform -> Curation -> Policiies
 ![建立 Curation Policy（步驟一）](./workshop/images/curation-policy-step1.png)
@@ -340,7 +341,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
   ![新建 Curation Condition](./workshop/images/curation-condition-new.png)
 - 選擇 **Block Specific Package Versions** 範本。
 - 設定：
-  - Condition name：`block-axios-1.7.2-<student-id>`（請帶上你自己的 student-id，避免多人共用平台時名稱衝突）
+  - Condition name：`block-axios-172-<student-id>`（名稱**不可包含 `.`**，所以用 `172` 代替 `1.7.2`；並帶上你自己的 student-id 避免多人共用平台時名稱衝突）
   - Package type：`npm`
   - Package：`axios`
   - Version：`1.7.2`

@@ -288,7 +288,7 @@ With the first build-info in place, here is the core of the workshop: create a C
 
 ### 5.1  Create A Curation Policy To Block axios@1.7.2
 
-> ⚠️ When multiple people share the same platform, Policy and Condition names must be unique. Add your own student-id to both the Policy name and the Condition name (e.g. `block-axios-1.7.2-<student-id>`).
+> ⚠️ When multiple people share the same platform, Policy and Condition names must be unique. Add your own student-id to both the Policy name and the Condition name (e.g. `block-axios-172-<student-id>`). The Condition name must not contain `.`, so use `172` instead of `1.7.2`.
 
 - Step 1
 ![Create Curation Policy (step 1)](./workshop/images/curation-policy-step1.png)
