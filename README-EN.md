@@ -63,7 +63,6 @@ Official references:
 Generate an Access Token in the JFrog Platform UI:
 
 1. From the left navigation, go to: **Administration → User Management → Access Tokens**.
-   > ⚠️ Navigate via the menu — do **not** paste `.../ui/admin/configuration/security/access_tokens` directly into the browser address bar, as it redirects to a 404. If you already hit a 404, clear your browser cache and re-enter via the navigation.
 2. Click **Generate Token**.
 3. In the dialog, **just click Generate** — no extra configuration is needed.
 4. Copy and store the generated token securely.

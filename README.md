@@ -57,7 +57,6 @@ npm -v
 在 JFrog Platform UI 中產生 Access Token：
 
 1. 從左側導覽進入：**Administration → User Management → Access Tokens**。
-   > ⚠️ 請用點擊導覽的方式進入，**不要**直接把 `.../ui/admin/configuration/security/access_tokens` 貼到瀏覽器網址列——這樣會跳轉到 404。若已經遇到 404，請清除瀏覽器快取後重新從導覽進入。
 2. 點擊 **Generate Token**。
 3. 在彈出視窗中**直接點擊 Generate 產生**，不需要任何額外設定。
 4. 複製並妥善保存產生的 token。
