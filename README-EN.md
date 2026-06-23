@@ -54,11 +54,51 @@ npm -v
 
 ## 1. Log In To JFrog
 
-With the tools ready, connect the JFrog CLI to your JFrog Platform instance: generate an Access Token in the UI, then use it to configure the CLI.
+With the tools ready, log in to the platform: first sign in to the JFrog Platform UI with your **lab account**, then generate an Access Token in the UI, and finally use it to configure the JFrog CLI.
 
-Official references:
-- Access Tokens: `https://docs.jfrog.com/administration/docs/access-tokens`
-- JFrog CLI Configuration: `https://docs.jfrog.com/integrations/docs/configuring-the-cli`
+### 1.1 Find And Log In To Your Lab Account
+
+Every attendee has a lab account derived from their **seat**.
+
+**Seat map:**
+
+![Lab account seat map](workshop/lab-account-seatmap.png)
+
+- The screen is at the front; the instructor's podium is at the front-right.
+- There are two table types: **slim blue tables = 2 seats (S1–S2)**; **wide tables = 4 seats (S1–S4)**.
+- Each small square under a table is a seat; the number on it is your **seat number**.
+
+**Find your account in 3 steps:**
+
+| Step | Action |
+|:---:|---|
+| **1** | Find your **table number** `T1` – `T20` on the seat map |
+| **2** | Check the table sign for your **seat number** `S1` / `S2` … (a 2-seat table only has S1, S2) |
+| **3** | Build your account: **`labuser-t<table>-s<seat>`** |
+
+> **Example:** seated at **table 4, seat 3** → your account is `labuser-t4-s3`.
+
+**Login info:**
+
+| Item | Value |
+|---|---|
+| **Platform URL** | `https://<your-jfrog-domain>` |
+| **Username** | `labuser-t<table>-s<seat>` |
+| **Password** | Shared password (announced on-site by the instructor) |
+
+Login steps:
+
+1. Open the platform URL `https://<your-jfrog-domain>` in a browser.
+2. On the login page, enter your **username** and the **shared password** (announced on-site).
+3. Click **Log In** to enter the JFrog platform.
+
+> ⚠️ **Do not change the password**, or later logins / instructor assistance may not match.
+>
+> Can't log in? 1) Check the account is all-lowercase with the right table/seat number; 2) Check the password is entered correctly; 3) Still stuck — **raise your hand for the instructor**.
+
+### 1.2 Generate An Access Token And Configure The CLI
+
+After logging in, connect the JFrog CLI to your JFrog Platform instance: generate an Access Token in the UI, then use it to configure the CLI.
 
 Generate an Access Token in the JFrog Platform UI:
 
@@ -67,8 +107,6 @@ Generate an Access Token in the JFrog Platform UI:
 3. In the dialog, **just click Generate** — no extra configuration is needed.
 4. Copy and store the generated token securely.
 5. Put the token into the `JFROG_ACCESS_TOKEN` environment variable in your terminal below, for use by JFrog CLI.
-
-> `<your-jfrog-domain>` is your JFrog Platform domain (for example `company.jfrog.io`, as provided by the instructor).
 
 Configure JFrog CLI with one command. The Server ID is fixed as `Artifactory`.
 
@@ -111,7 +149,7 @@ With the CLI connected, clone the workshop sample project to your machine.
 ```bash
 cd ~
 # If ~/jfrog-workshop already exists (e.g. you cloned it before), skip the clone and just enter it
-git clone https://github.com/alexwang66/jfrog-workshop.git 2>/dev/null || echo "jfrog-workshop already exists, skipping clone"
+git clone https://github.com/alexwang66/jfrog-workshop.git
 cd ~/jfrog-workshop
 ```
 
@@ -178,7 +216,6 @@ Enter the sample project directory.
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "labuser-t4-s3"
 Get-Content .\package.json
 ```
 
@@ -186,7 +223,6 @@ Get-Content .\package.json
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="labuser-t4-s3"
 cat ./package.json
 ```
 
@@ -301,8 +337,9 @@ With the first build-info in place, here is the core of the workshop: create a C
 ![Curation Condition configuration](./workshop/images/curation-condition-config.png)
 
 - Step 4, Click Next
-- Step 5, Select Block and Save Policy
-  ![Select Block and Save Policy](./workshop/images/curation-policy-save.png)
+- Step 5, Select **Block** and Save the Policy; make sure you check the **Enforce policy on cached packages** option.
+
+![Select Block and Save Policy](./workshop/images/curation-policy-save.png)
 
 ### 5.2 Delete The Cached `axios` Package From Artifactory Remote Cache
 

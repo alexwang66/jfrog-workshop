@@ -149,7 +149,7 @@ CLI 連上平台後，把工作坊範例專案 clone 到本機。
 ```bash
 cd ~
 # 若 ~/jfrog-workshop 已存在（例如先前已 clone 過），可略過 git clone 直接進入
-git clone https://github.com/alexwang66/jfrog-workshop.git 2>/dev/null || echo "jfrog-workshop 已存在，略過 clone"
+git clone https://github.com/alexwang66/jfrog-workshop.git
 cd ~/jfrog-workshop
 ```
 
@@ -218,7 +218,6 @@ chmod +x ./create-repo.sh
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "labuser-t4-s3"
 Get-Content .\package.json
 ```
 
@@ -226,7 +225,6 @@ Get-Content .\package.json
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="labuser-t4-s3"
 cat ./package.json
 ```
 
@@ -351,11 +349,9 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 ![設定 Curation Condition](./workshop/images/curation-condition-config.png)
 
 - Step 4, Click Next
-- Step 5, Select "Block" and Save the Policy
-  ![選擇 Block 並 Save Policy](./workshop/images/curation-policy-save.png)
+- Step 5, Select "Block" and Save the Policy, make sure you checked the "Enforce policy on cached packages" button.
 
-
-
+![選擇 Block 並 Save Policy](./workshop/images/curation-policy-save.png)
 
 
 ### 5.2 從 Artifactory Remote Cache 刪除已快取的 `axios`
