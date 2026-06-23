@@ -341,26 +341,7 @@ With the first build-info in place, here is the core of the workshop: create a C
 
 ![Select Block and Save Policy](./workshop/images/curation-policy-save.png)
 
-### 5.2 Delete The Cached `axios` Package From Artifactory Remote Cache
-
-If `axios@1.7.2` was downloaded before the Curation policy was created, Artifactory may have cached it in the remote cache repository. Delete the cached package before retrying the npm install.
-
-Official references:
-- Remote Repositories: `https://docs.jfrog.com/artifactory/docs/remote-repositories`
-- Managing Artifacts: `https://docs.jfrog.com/artifactory/docs/managing-artifacts`
-
-In the JFrog UI:
-1. Go to Artifactory -> Artifacts.
-2. Open the remote cache repository: `<student-id>-npm-remote-cache`.
-3. Find `axios`.
-4. Right-click `axios` and choose Delete / Delete Content.
-5. Confirm the deletion.
-
-Example:
-
-![Delete Axios From Remote Cache](./workshop/images/remote-cache-delete-axios.png)
-
-### 5.3 Re-run Install And Observe The Block
+### 5.2 Re-run Install And Observe The Block
 
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
@@ -419,7 +400,7 @@ Curation audit event example:
 
 ![Curation Audit Blocked](./workshop/images/current-curation-audit.svg)
 
-### 5.4 Find An Approved Version In Catalog And Rebuild
+### 5.3 Find An Approved Version In Catalog And Rebuild
 
 After confirming the block, go back to JFrog Catalog, find the latest `axios` version, and verify that it is allowed for download.
 

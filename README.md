@@ -354,23 +354,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 ![選擇 Block 並 Save Policy](./workshop/images/curation-policy-save.png)
 
 
-### 5.2 從 Artifactory Remote Cache 刪除已快取的 `axios`
-
-如果 `axios@1.7.2` 在建立 Curation policy 前已被下載，Artifactory 可能已將它快取到 remote cache repository。重新安裝前需先刪除該快取套件。
-
-在 JFrog UI 中：
-
-1. 進入 Artifactory -> Artifacts。
-2. 開啟 remote cache repository：`<student-id>-npm-remote-cache`。
-3. 找到 `axios`。
-4. 右鍵點擊 `axios`，選擇 Delete / Delete Content。
-5. 確認刪除。
-
-示例：
-
-![從 Remote Cache 刪除 axios](./workshop/images/remote-cache-delete-axios.png)
-
-### 5.3 重新執行 Install 並觀察阻擋
+### 5.2 重新執行 Install 並觀察阻擋
 
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
@@ -425,7 +409,7 @@ Curation audit event 示例：
 
 ![Curation Audit Blocked](./workshop/images/current-curation-audit.svg)
 
-### 5.4 在 Catalog 中選擇可用版本並重新構建
+### 5.3 在 Catalog 中選擇可用版本並重新構建
 
 阻擋效果確認後，回到 JFrog Catalog 查找 `axios` 的最新版本，確認該版本是否可下載。
 
