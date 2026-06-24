@@ -210,7 +210,7 @@ With the repositories ready, complete the first npm build on your machine and pu
 
 This workshop **treats `axios@1.7.2` as a simulated malicious package version**. The goal is to make `npm install` fail when it tries to resolve that version through JFrog Curation.
 
-Enter the sample project directory.
+Enter the sample project directory. The path below uses `~/jfrog-workshop/npm-sample` as an example; **if you cloned the project elsewhere (e.g. Codespaces or a custom directory), change it to your own `npm-sample` path**. You only need to `cd` once — the npm / jf commands that follow all assume you are already in this directory, so you don't need to `cd` again each time.
 
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
@@ -250,33 +250,6 @@ jf npm-config \
   --repo-resolve="${STUDENT_ID}-npm-virtual" \
   --repo-deploy="${STUDENT_ID}-npm-dev-local" \
   --global=false
-```
-
-- Check that `axios` in package.json is version `1.7.2`.
-
-<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
-
-```powershell
-cd ~/jfrog-workshop/npm-sample
-notepad .\package.json
-Get-Content .\package.json
-```
-
-🐧 macOS / Linux:
-
-```bash
-cd ~/jfrog-workshop/npm-sample
-cat package.json
-```
-
-Confirm that `package.json` contains the following:
-
-```json
-{
-  "dependencies": {
-    "axios": "1.7.2"
-  }
-}
 ```
 
 Install, publish, and publish build-info:
@@ -346,7 +319,6 @@ With the first build-info in place, here is the core of the workshop: create a C
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
-cd ~/jfrog-workshop/npm-sample
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
@@ -359,7 +331,6 @@ jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
 🐧 macOS / Linux:
 
 ```bash
-cd ~/jfrog-workshop/npm-sample
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
@@ -421,8 +392,6 @@ Then directly edit `package.json` to remediate the project to the approved versi
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
-cd ~/jfrog-workshop/npm-sample
-
 notepad .\package.json
 Get-Content .\package.json
 ```
@@ -430,8 +399,6 @@ Get-Content .\package.json
 🐧 macOS / Linux:
 
 ```bash
-cd ~/jfrog-workshop/npm-sample
-
 nano package.json
 cat package.json
 ```
@@ -452,8 +419,6 @@ Clean the local npm state, rebuild, and publish build-info.
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell:
 
 ```powershell
-cd ~/jfrog-workshop/npm-sample
-
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
@@ -470,8 +435,6 @@ jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
 🐧 macOS / Linux:
 
 ```bash
-cd ~/jfrog-workshop/npm-sample
-
 rm -rf node_modules package-lock.json
 npm cache clean --force
 

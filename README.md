@@ -212,7 +212,7 @@ chmod +x ./create-repo.sh
 
 本工作坊 **將 `axios@1.7.2` 視為模擬惡意套件版本**。目標是讓 `npm install` 透過 JFrog Curation 解析到該版本時被阻擋。
 
-進入範例專案目錄。
+進入範例專案目錄。以下以 `~/jfrog-workshop/npm-sample` 為示例路徑;**若你 clone 到其他位置(例如 Codespaces 或自訂目錄),請改成你自己的 `npm-sample` 路徑**。進入一次即可 —— 後續的 npm / jf 指令都假設你已在此目錄中,不需要每次重新 `cd`。
 
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
@@ -252,32 +252,6 @@ jf npm-config \
   --repo-resolve="${STUDENT_ID}-npm-virtual" \
   --repo-deploy="${STUDENT_ID}-npm-dev-local" \
   --global=false
-```
-- 查看 package.json里的"axios"的版本"1.7.2"
-
-<img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
-
-```powershell
-cd ~/jfrog-workshop/npm-sample
-notepad .\package.json
-Get-Content .\package.json
-```
-
-🐧 macOS / Linux：
-
-```bash
-cd ~/jfrog-workshop/npm-sample
-cat package.json
-```
-
-確認 `package.json` 中存在以下內容：
-
-```json
-{
-  "dependencies": {
-    "axios": "1.7.2"
-  }
-}
 ```
 
 安裝、發布套件並發布 build-info：
@@ -359,7 +333,6 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
-cd ~/jfrog-workshop/npm-sample
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
@@ -372,7 +345,6 @@ jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
 🐧 macOS / Linux：
 
 ```bash
-cd ~/jfrog-workshop/npm-sample
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
@@ -427,8 +399,6 @@ Curation audit event 示例：
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
-cd ~/jfrog-workshop/npm-sample
-
 notepad .\package.json
 Get-Content .\package.json
 ```
@@ -436,8 +406,6 @@ Get-Content .\package.json
 🐧 macOS / Linux：
 
 ```bash
-cd ~/jfrog-workshop/npm-sample
-
 cat package.json
 ```
 
@@ -457,8 +425,6 @@ cat package.json
 <img src="./workshop/images/microsoft-logo.svg" width="14" alt="Windows"/> Windows PowerShell：
 
 ```powershell
-cd ~/jfrog-workshop/npm-sample
-
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
@@ -475,8 +441,6 @@ jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
 🐧 macOS / Linux：
 
 ```bash
-cd ~/jfrog-workshop/npm-sample
-
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
