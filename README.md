@@ -18,7 +18,7 @@
 開始動手前，先確認本機已裝好並能執行以下工具。
 
 - 本機需安裝：
-  - VS Code 或 Cursor（建議，用於開啟專案與執行內建終端機）
+  - VS Code 或任何代碼編輯器（建議，用於開啟專案與執行內建終端機）
   - JFrog CLI（`jf`）
   - Git（`git`）
   - Node.js 20.x LTS，包含 `npm`
@@ -360,7 +360,6 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "labuser-t4-s3"
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
@@ -374,7 +373,6 @@ jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="labuser-t4-s3"
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
@@ -430,7 +428,6 @@ Curation audit event 示例：
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "labuser-t4-s3"
 
 notepad .\package.json
 Get-Content .\package.json
@@ -440,7 +437,6 @@ Get-Content .\package.json
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="labuser-t4-s3"
 
 cat package.json
 ```
@@ -462,7 +458,6 @@ cat package.json
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "labuser-t4-s3"
 
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
@@ -481,7 +476,6 @@ jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="labuser-t4-s3"
 
 rm -rf node_modules package-lock.json
 npm cache clean --force

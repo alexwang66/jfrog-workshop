@@ -19,7 +19,7 @@ Before you start, make sure the following tools are installed and runnable on yo
 
 - JFrog Cloud trial account: `https://jfrog.com/start-free/`
 - Required local tools:
-  - VS Code or Cursor (recommended, for opening the project and running the integrated terminal)
+  - VS Code or any code editor (recommended, for opening the project and running the integrated terminal)
   - JFrog CLI (`jf`)
   - Git (`git`)
   - Node.js 20.x LTS, including `npm`
@@ -347,7 +347,6 @@ With the first build-info in place, here is the core of the workshop: create a C
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "labuser-t4-s3"
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
 
@@ -361,7 +360,6 @@ jf npm install --build-name=$env:BUILD_NAME --build-number=$env:BUILD_NUMBER
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="labuser-t4-s3"
 rm -rf node_modules package-lock.json
 npm cache clean --force
 
@@ -424,7 +422,6 @@ Then directly edit `package.json` to remediate the project to the approved versi
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "labuser-t4-s3"
 
 notepad .\package.json
 Get-Content .\package.json
@@ -434,7 +431,6 @@ Get-Content .\package.json
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="labuser-t4-s3"
 
 nano package.json
 cat package.json
@@ -457,7 +453,6 @@ Clean the local npm state, rebuild, and publish build-info.
 
 ```powershell
 cd ~/jfrog-workshop/npm-sample
-$env:STUDENT_ID = "labuser-t4-s3"
 
 Remove-Item -Recurse -Force node_modules, package-lock.json -ErrorAction SilentlyContinue
 npm cache clean --force
@@ -476,7 +471,6 @@ jf rt build-publish $env:BUILD_NAME $env:BUILD_NUMBER
 
 ```bash
 cd ~/jfrog-workshop/npm-sample
-export STUDENT_ID="labuser-t4-s3"
 
 rm -rf node_modules package-lock.json
 npm cache clean --force
