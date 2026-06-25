@@ -48,7 +48,7 @@ node -v
 npm -v
 ```
 
-> ✅ Checkpoint: all four `--version` commands print a version, so the tools are ready.
+> ✅ Checkpoint 1: all four `--version` commands print a version, so the tools are ready.
 
 ---
 
@@ -138,7 +138,7 @@ jf rt ping
 
 All later commands use the Server ID `Artifactory`. If you see `Server ID 'Artifactory' does not exist`, the CLI configuration was not created successfully. Run the `jf c add Artifactory ...` command again.
 
-> ✅ Checkpoint: `jf rt ping` returns `OK`, and `jf c show` lists the `Artifactory` server.
+> ✅ Checkpoint 2: `jf rt ping` returns `OK`, and `jf c show` lists the `Artifactory` server.
 
 ---
 
@@ -154,7 +154,7 @@ git clone --depth 1 https://github.com/alexwang66/jfrog-workshop.git
 cd ~/jfrog-workshop
 ```
 
-> ✅ Checkpoint: the `~/jfrog-workshop` directory exists and contains `npm-sample/` and `automation/`.
+> ✅ Checkpoint 3: the `~/jfrog-workshop` directory exists and contains `npm-sample/` and `automation/`.
 >
 > ℹ️ All later `cd` commands use **absolute paths** (e.g. `cd ~/jfrog-workshop/automation`), so you can copy-paste them from any directory without errors — there is **no** need to manually `cd jfrog-workshop` again.
 
@@ -201,7 +201,7 @@ In Artifactory, open `https://<your-jfrog-domain>/ui/admin/repositories` to view
 
 ![Created repositories](./workshop/images/repos-created.png)
 
-> ✅ Checkpoint: in All Repositories you can find 3 repos prefixed with your student-id (`-npm-virtual` / `-npm-remote` / `-npm-dev-local`).
+> ✅ Checkpoint 4: in All Repositories you can find 3 repos prefixed with your student-id (`-npm-virtual` / `-npm-remote` / `-npm-dev-local`).
 
 ---
 
@@ -288,7 +288,7 @@ Verify in the UI:
 
 ![Build #1 build-info](./workshop/images/build-info-1.png)
 
-> ✅ Checkpoint: `#1` appears under Builds, and the build-info dependencies include `axios@1.7.2`.
+> ✅ Checkpoint 5: `#1` appears under Builds, and the build-info dependencies include `axios@1.7.2`.
 
 ---
 
@@ -453,7 +453,7 @@ Verify in the UI:
 - Artifactory -> Builds -> `<student-id>-npm-sample` -> `#3`
 - The build-info dependencies should show `axios@1.16.1`.
 
-> ✅ Checkpoint: `#2` triggered the Curation block (or shows `axios 1.7.2` vulnerabilities in Xray), and `#3` rebuilt successfully using `axios@1.16.1`. The Curation flow is complete.
+> ✅ Checkpoint 6: `#2` triggered the Curation block (or shows `axios 1.7.2` vulnerabilities in Xray), and `#3` rebuilt successfully using `axios@1.16.1`. The Curation flow is complete.
 
 ---
 

@@ -46,7 +46,7 @@ node -v
 npm -v
 ```
 
-> ✅ 檢查點：四條 `--version` 指令都能印出版本號，代表工具已就緒。
+> ✅ 檢查點 1：四條 `--version` 指令都能印出版本號，代表工具已就緒。
 
 ---
 
@@ -138,7 +138,7 @@ jf rt ping
 
 後續所有命令都使用 Server ID `Artifactory`。如果看到 `Server ID 'Artifactory' does not exist`，代表 CLI 設定沒有成功建立，請重新執行 `jf c add Artifactory ...`。
 
-> ✅ 檢查點：`jf rt ping` 回傳 `OK`，且 `jf c show` 能看到 `Artifactory` 這個 server。
+> ✅ 檢查點 2：`jf rt ping` 回傳 `OK`，且 `jf c show` 能看到 `Artifactory` 這個 server。
 
 ---
 
@@ -154,7 +154,7 @@ git clone --depth 1 https://github.com/alexwang66/jfrog-workshop.git
 cd ~/jfrog-workshop
 ```
 
-> ✅ 檢查點：`~/jfrog-workshop` 目錄已存在，裡面有 `npm-sample/` 與 `automation/`。
+> ✅ 檢查點 3：`~/jfrog-workshop` 目錄已存在，裡面有 `npm-sample/` 與 `automation/`。
 >
 > ℹ️ 後續步驟的 `cd` 指令都使用 **絕對路徑**（如 `cd ~/jfrog-workshop/automation`），所以不論你目前在哪個目錄，直接複製貼上都不會出錯，**不需要**再手動 `cd jfrog-workshop`。
 
@@ -203,7 +203,7 @@ chmod +x ./create-repo.sh
 
 ![建立的倉庫列表](./workshop/images/repos-created.png)
 
-> ✅ 檢查點：在 All Repositories 中能搜到 3 個以你的 student-id 為前綴的倉庫（`-npm-virtual` / `-npm-remote` / `-npm-dev-local`）。
+> ✅ 檢查點 4：在 All Repositories 中能搜到 3 個以你的 student-id 為前綴的倉庫（`-npm-virtual` / `-npm-remote` / `-npm-dev-local`）。
 
 ---
 
@@ -291,7 +291,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 
 ![Build #1 build-info](./workshop/images/build-info-1.png)
 
-> ✅ 檢查點：Builds 中出現 `#1`，build-info 的 dependencies 含 `axios@1.7.2`。
+> ✅ 檢查點 5：Builds 中出現 `#1`，build-info 的 dependencies 含 `axios@1.7.2`。
 
 ---
 
@@ -460,7 +460,7 @@ jf rt build-publish "$BUILD_NAME" "$BUILD_NUMBER"
 - Artifactory -> Builds -> `<student-id>-npm-sample` -> `#3`
 - Build-info 中的 dependencies 應顯示已使用 `axios@1.16.1`。
 
-> ✅ 檢查點：`#2` 已觸發 Curation 阻擋（或在 Xray 看到 `axios 1.7.2` 的漏洞），`#3` 已改用 `axios@1.16.1` 並建置成功，Curation 流程完成。
+> ✅ 檢查點 6：`#2` 已觸發 Curation 阻擋（或在 Xray 看到 `axios 1.7.2` 的漏洞），`#3` 已改用 `axios@1.16.1` 並建置成功，Curation 流程完成。
 
 ---
 
