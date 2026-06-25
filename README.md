@@ -478,6 +478,7 @@ $env:STUDENT_ID = "labuser-t4-s3"
 🐧 macOS / Linux：
 
 ```bash
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 cd ~/jfrog-workshop/automation
 export STUDENT_ID="labuser-t4-s3"
 chmod +x ./delete-repo.sh
