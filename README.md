@@ -82,12 +82,12 @@ npm -v
 |---|---|
 | **平台網址** | `https://<your-jfrog-domain>` |
 | **帳號 Username** | `labuser-t〈桌號〉-s〈座位號〉` |
-| **密碼 Password** | 統一密碼（以講師現場公布為準） |
+| **密碼 Password** | 統一密碼（announced on-site by the instructor） |
 
 登入步驟：
 
 1. 用瀏覽器打開平台網址 `https://<your-jfrog-domain>`。
-2. 在登入頁輸入你的**帳號**與**統一密碼**（密碼由講師現場公布）。
+2. 在登入頁輸入你的**帳號**與**統一密碼**（password announced on-site by the instructor）。
 3. 點擊 **Log In** 進入 JFrog 平台。
 
 > ⚠️ **請勿修改密碼**，以免後續登入或講師協助時對不上。
@@ -173,12 +173,6 @@ cd ~/jfrog-workshop
 ```powershell
 cd ~/jfrog-workshop/automation
 $env:STUDENT_ID = "labuser-t4-s3"
-.\create-repo.ps1 -StudentId $env:STUDENT_ID
-```
-
-如果 PowerShell 執行原則阻擋腳本，可在目前終端機暫時允許腳本後重試：
-
-```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\create-repo.ps1 -StudentId $env:STUDENT_ID
 ```
@@ -479,7 +473,6 @@ $env:STUDENT_ID = "labuser-t4-s3"
 🐧 macOS / Linux：
 
 ```bash
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 cd ~/jfrog-workshop/automation
 export STUDENT_ID="labuser-t4-s3"
 chmod +x ./delete-repo.sh

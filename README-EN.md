@@ -58,43 +58,7 @@ With the tools ready, log in to the platform: first sign in to the JFrog Platfor
 
 ### 1.1 Find And Log In To Your Lab Account
 
-Every attendee has a lab account derived from their **seat**.
-
-**Seat map:**
-
-![Lab account seat map](workshop/lab-account-seatmap.png)
-
-- The screen is at the front; the instructor's podium is at the front-right.
-- There are two table types: **slim blue tables = 2 seats (S1–S2)**; **wide tables = 4 seats (S1–S4)**.
-- Each small square under a table is a seat; the number on it is your **seat number**.
-
-**Find your account in 3 steps:**
-
-| Step | Action |
-|:---:|---|
-| **1** | Find your **table number** `T1` – `T20` on the seat map |
-| **2** | Check the table sign for your **seat number** `S1` / `S2` … (a 2-seat table only has S1, S2) |
-| **3** | Build your account: **`labuser-t<table>-s<seat>`** |
-
-> **Example:** seated at **table 4, seat 3** → your account is `labuser-t4-s3`.
-
-**Login info:**
-
-| Item | Value |
-|---|---|
-| **Platform URL** | `https://<your-jfrog-domain>` |
-| **Username** | `labuser-t<table>-s<seat>` |
-| **Password** | Shared password (announced on-site by the instructor) |
-
-Login steps:
-
-1. Open the platform URL `https://<your-jfrog-domain>` in a browser.
-2. On the login page, enter your **username** and the **shared password** (announced on-site).
-3. Click **Log In** to enter the JFrog platform.
-
-> ⚠️ **Do not change the password**, or later logins / instructor assistance may not match.
->
-> Can't log in? 1) Check the account is all-lowercase with the right table/seat number; 2) Check the password is entered correctly; 3) Still stuck — **raise your hand for the instructor**.
+> Your lab account, password, and platform URL will be **announced on-site by the instructor**. Use those credentials to sign in to the JFrog Platform UI.
 
 ### 1.2 Generate An Access Token And Configure The CLI
 
@@ -173,12 +137,6 @@ Example: if your user id is `labuser-t4-s3`, set `STUDENT_ID` to `labuser-t4-s3`
 ```powershell
 cd ~/jfrog-workshop/automation
 $env:STUDENT_ID = "labuser-t4-s3"
-.\create-repo.ps1 -StudentId $env:STUDENT_ID
-```
-
-If PowerShell blocks script execution, temporarily allow scripts in the current terminal and retry:
-
-```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\create-repo.ps1 -StudentId $env:STUDENT_ID
 ```

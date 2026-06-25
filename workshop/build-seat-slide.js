@@ -154,7 +154,7 @@ s.addText("登入資訊 Login", { x: px + 0.65, y: 4.75, w: pw - 0.9, h: 0.36, f
 const cred = [
   { k: "平台網址", v: PLATFORM_URL },
   { k: "帳號", v: "labuser-t〈桌號〉-s〈座位號〉" },
-  { k: "密碼（統一）", v: "***REDACTED***" },
+  { k: "密碼（統一）", v: (process.env.LAB_PASSWORD || "現場公布") },
 ];
 let cy2 = 5.27;
 cred.forEach((c) => {

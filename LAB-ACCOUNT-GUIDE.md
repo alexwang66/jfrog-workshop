@@ -32,14 +32,14 @@
 
 | 項目 | 內容 |
 |---|---|
-| **平台網址** | `https://<workshop 平台網址>` （以講師現場公布為準） |
+| **平台網址** | `https://<workshop 平台網址>` （announced on-site by the instructor） |
 | **帳號 Username** | `labuser-t〈桌號〉-s〈座位號〉` |
-| **密碼 Password** | 統一密碼（以講師現場公布為準） |
+| **密碼 Password** | 統一密碼（announced on-site by the instructor） |
 
 ### 登入步驟
 
 1. 用瀏覽器打開上方**平台網址**。
-2. 在登入頁輸入你的**帳號**與**統一密碼**（密碼由講師現場公布）。
+2. 在登入頁輸入你的**帳號**與**統一密碼**（password announced on-site by the instructor）。
 3. 點擊 **Log In** 即可進入 JFrog 平台,開始實驗。
 
 > ⚠️ **請勿修改密碼**,以免後續登入或講師協助時對不上。
@@ -55,11 +55,10 @@
 　對照上方座位圖,從前(靠屏幕)往後數行、從左往右數列,找到你坐的位置即可。
 
 **Q：帳號或密碼登不進去?**
-　1) 確認帳號全小寫、桌號/座位號沒填錯;2) 確認密碼輸入正確（以講師現場公布為準）;3) 仍無法登入請**舉手聯絡講師**。
+　1) 確認帳號全小寫、桌號/座位號沒填錯;2) 確認密碼輸入正確（announced on-site by the instructor）;3) 仍無法登入請**舉手聯絡講師**。
 
 **Q：可以用別人的帳號嗎?**
 　請使用自己座位對應的帳號,避免和鄰座衝突。
 
 ---
 
-> 本頁座位圖由 [workshop/lab-account-seatmap.pptx](workshop/lab-account-seatmap.pptx) 匯出;帳號由 [automation/create-labusers.sh](automation/create-labusers.sh) 建立。
