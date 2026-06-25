@@ -149,7 +149,8 @@ CLI 連上平台後，把工作坊範例專案 clone 到本機。
 ```bash
 cd ~
 # 若 ~/jfrog-workshop 已存在（例如先前已 clone 過），可略過 git clone 直接進入
-git clone https://github.com/alexwang66/jfrog-workshop.git
+# --depth 1 做淺層 clone，只取最新版本（不含歷史），下載更快、體積更小
+git clone --depth 1 https://github.com/alexwang66/jfrog-workshop.git
 cd ~/jfrog-workshop
 ```
 

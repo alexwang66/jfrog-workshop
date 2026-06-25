@@ -149,7 +149,8 @@ With the CLI connected, clone the workshop sample project to your machine.
 ```bash
 cd ~
 # If ~/jfrog-workshop already exists (e.g. you cloned it before), skip the clone and just enter it
-git clone https://github.com/alexwang66/jfrog-workshop.git
+# --depth 1 makes a shallow clone (latest version only, no history) — smaller and faster to download
+git clone --depth 1 https://github.com/alexwang66/jfrog-workshop.git
 cd ~/jfrog-workshop
 ```
 
