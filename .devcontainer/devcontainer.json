@@ -1,0 +1,13 @@
+{
+  "name": "JFrog NPM + Curation Workshop",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "waitFor": "postCreateCommand",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "JFrog.jfrog-vscode-extension"
+      ]
+    }
+  }
+}

@@ -17,7 +17,21 @@ Goal: Complete an **npm build + build-info publication** on a customer machine, 
 
 ## 0. Prerequisites
 
-Before you start, make sure the following tools are installed and runnable on your machine.
+There are two ways to prepare your environment — **pick one**.
+
+### Option A (recommended): GitHub Codespaces — nothing to install locally
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/alexwang66/jfrog-workshop)
+
+Click the button above and GitHub builds a cloud dev environment with `jf`, `node`, `npm`, and `git` already installed — you **don't need to install anything on your own machine**.
+
+- You need a GitHub account (personal accounts include a free monthly Codespaces quota).
+- After clicking, wait a moment; once the terminal prints the `jf / node / npm / git` versions, the environment is ready.
+- The project is already in the environment (`~/jfrog-workshop`), so you can **skip the `git clone` in §2**; after logging in (§1), go straight to the hands-on steps.
+
+### Option B: Local install
+
+If you are not using Codespaces, make sure the following tools are installed and runnable on your machine before you start.
 
 - JFrog Cloud trial account: `https://jfrog.com/start-free/`
 - Required local tools:
@@ -111,6 +125,8 @@ All later commands use the Server ID `Artifactory`. If you see `Server ID 'Artif
 ## 2. Clone The Workshop Repository
 
 With the CLI connected, clone the workshop sample project to your machine.
+
+> 💡 Using Codespaces (Option A)? The project is already in the environment — **skip this section** and go to §3.
 
 ```bash
 cd ~

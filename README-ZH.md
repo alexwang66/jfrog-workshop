@@ -17,7 +17,21 @@
 
 ## 0. 前置需求
 
-開始動手前，先確認本機已裝好並能執行以下工具。
+本工作坊有兩種環境準備方式，**擇一即可**。
+
+### 方式 A（推薦）：GitHub Codespaces —— 免在本機安裝任何工具
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/alexwang66/jfrog-workshop)
+
+點上方按鈕，GitHub 會在雲端建立一個開發環境，已預裝 `jf`、`node`、`npm`、`git`，你**完全不需要在本機安裝任何東西**。
+
+- 需要一個 GitHub 帳號（個人帳號每月有免費 Codespaces 額度）。
+- 點按鈕後稍候片刻，等終端機印出 `jf / node / npm / git` 版本即代表環境就緒。
+- 專案已經在環境裡（`~/jfrog-workshop`），所以**可跳過 §2 的 `git clone`**；登入（§1）後直接進入實作。
+
+### 方式 B：本機安裝
+
+若不使用 Codespaces，開始動手前，先確認本機已裝好並能執行以下工具。
 
 - 本機需安裝：
   - VS Code 或任何代碼編輯器（建議，用於開啟專案與執行內建終端機）
@@ -111,6 +125,8 @@ jf rt ping
 ## 2. 複製工作坊 Repository
 
 CLI 連上平台後，把工作坊範例專案 clone 到本機。
+
+> 💡 用 Codespaces（方式 A）的話，專案已經在環境裡，本節可**直接跳過**，前往 §3。
 
 ```bash
 cd ~
